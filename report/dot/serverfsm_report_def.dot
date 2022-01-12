@@ -1,0 +1,29 @@
+digraph test {
+rankdir=LR;
+ranksep=0.1; nodesep=0.1; defaultdist = 0.1; len = 0.1;
+"need sender" -> "need sender" [label="cmnd rset"];
+"need data" -> "closed" [label="conn lost"];
+"ready" -> "ready" [label="cmnd noop"];
+"need recipient" -> "need sender" [label="cmnd rset"];
+"waiting for data" -> "closed" [label="conn lost"];
+"waiting for data" -> "need sender" [label="mail end"];
+"need sender" -> "closed" [label="conn lost"];
+"need recipient" -> "need data" [label="cmnd rcpt"];
+"need sender" -> "need sender" [label="cmnd noop"];
+"waiting for data" -> "waiting for data" [label="mail data"];
+"ready" -> "need sender" [label="cmnd helo"];
+"need recipient" -> "closed" [label="cmnd quit"];
+"need data" -> "need data" [label="cmnd noop"];
+"ready" -> "closed" [label="conn lost"];
+"need sender" -> "closed" [label="cmnd quit"];
+"need recipient" -> "need recipient" [label="cmnd noop"];
+"need sender" -> "need recipient" [label="cmnd mail"];
+"need data" -> "need sender" [label="cmnd rset"];
+"need recipient" -> "closed" [label="conn lost"];
+"need data" -> "closed" [label="cmnd quit"];
+"ready" -> "need sender" [label="cmnd ehlo"];
+"need data" -> "waiting for data" [label="cmnd data"];
+"ready" -> "closed" [label="cmnd quit"];
+"'*'" -> "ready" [label="conn accepted"];
+"need data" -> "need data" [label="cmnd rcpt"];
+}

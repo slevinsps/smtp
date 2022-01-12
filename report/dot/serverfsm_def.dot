@@ -1,0 +1,29 @@
+digraph test {
+rankdir=LR;
+ranksep=0.1; nodesep=0.1; defaultdist = 0.1; len = 0.1;
+"need data" -> "waiting for data;    ttype = cmnd data" [label="cmnd data"];
+"need data" -> "need sender;         ttype = cmnd rset" [label="cmnd rset"];
+"ready" -> "ready;               ttype = cmnd noop" [label="cmnd noop"];
+"need sender" -> "closed;              ttype = close" [label="conn lost"];
+"need recipient" -> "closed;              ttype = close" [label="cmnd quit"];
+"waiting for data" -> "need sender;         ttype = mail end" [label="mail end"];
+"need sender" -> "need recipient;      ttype = cmnd mail" [label="cmnd mail"];
+"waiting for data" -> "waiting for data;    ttype = mail data" [label="mail data"];
+"ready" -> "need sender;         ttype = cmnd ehlo" [label="cmnd ehlo"];
+"need recipient" -> "need data;           ttype = cmnd rcpt" [label="cmnd rcpt"];
+"'*'" -> "ready;               ttype = accepted" [label="conn accepted"];
+"need data" -> "closed;              ttype = close" [label="conn lost"];
+"ready" -> "closed;              ttype = close" [label="cmnd quit"];
+"ready" -> "closed;              ttype = close" [label="conn lost"];
+"need data" -> "closed;              ttype = close" [label="cmnd quit"];
+"need recipient" -> "need sender;         ttype = cmnd rset" [label="cmnd rset"];
+"need data" -> "need data;           ttype = cmnd rcpt" [label="cmnd rcpt"];
+"need recipient" -> "need recipient;      ttype = cmnd noop" [label="cmnd noop"];
+"waiting for data" -> "closed;              ttype = close" [label="conn lost"];
+"need sender" -> "need sender;         ttype = cmnd rset" [label="cmnd rset"];
+"need recipient" -> "closed;              ttype = close" [label="conn lost"];
+"ready" -> "need sender;         ttype = cmnd helo" [label="cmnd helo"];
+"need data" -> "need data;           ttype = cmnd noop" [label="cmnd noop"];
+"need sender" -> "closed;              ttype = close" [label="cmnd quit"];
+"need sender" -> "need sender;         ttype = cmnd noop" [label="cmnd noop"];
+}

@@ -1,0 +1,38 @@
+AutoGen Definitions options;
+
+prog-name     = server;
+prog-title    = "SMTP Mail Transfer Agent Server";
+test_main;
+long-opts;
+gnu-usage;    /* GNU style preferred to default */
+
+main = { main-type = shell-process; };
+
+flag = {
+    name      = port;           /* Порт, который слушает сервер */
+    value     = p;              /* Краткий флаг (-p) */
+    arg-type  = number;
+    arg-range = 110;
+    arg-range = "1024->65000";
+    max       = 1;              /* Не более одного раза */
+    min       = 0;              /* Необязательный параметр */
+    descrip   = "Port to bind";
+};
+
+flag = {
+    name      = maildir;        /* Путь к директории с письмами */
+    value     = d;              /* Краткий флаг (-d) */
+    arg-type  = string;
+    max       = 1;              /* Не более одного раза */
+    min       = 0;              /* Необязательный параметр */
+    descrip   = "Path to maildir directory";
+};
+
+flag = {
+    name      = logdir;         /* Путь к директории с лог-файлами */
+    value     = l;              /* Краткий флаг (-l) */
+    arg-type  = string;
+    max       = 1;              /* Не более одного раза */
+    min       = 0;              /* Необязательный параметр */
+    descrip   = "Path to log directory";
+};

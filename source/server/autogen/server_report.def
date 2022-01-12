@@ -1,0 +1,46 @@
+Autogen Definitions fsm;
+
+method = case;
+type   = reentrant;
+
+prefix = smtp_server;
+
+cookie = "int client_socket_fd";
+cookie = "char*** matchdata";
+cookie = "int matchdatalen";
+
+state  = ready, need_sender, need_recipient, need_data, waiting_for_data, saving_mail, closed;
+event  = cmnd_noop, cmnd_helo, cmnd_ehlo, cmnd_mail, cmnd_rcpt, cmnd_vrfy, cmnd_data, cmnd_rset,
+    cmnd_quit, mail_end, mail_data, mail_saved, conn_accepted, conn_lost;
+
+transition =
+{ tst  = '*';               tev = conn_accepted;        next = ready;               },
+
+{ tst  = ready;             tev = cmnd_noop;            next = ready;               },
+{ tst  = ready;             tev = cmnd_helo;            next = need_sender;         },
+{ tst  = ready;             tev = cmnd_ehlo;            next = need_sender;         },
+{ tst  = ready;             tev = cmnd_quit;            next = closed;              },
+{ tst  = ready;             tev = conn_lost;            next = closed;              },
+
+{ tst  = need_sender;       tev = cmnd_noop;            next = need_sender;         },
+{ tst  = need_sender;       tev = cmnd_mail;            next = need_recipient;      },
+{ tst  = need_sender;       tev = cmnd_rset;            next = need_sender;         },
+{ tst  = need_sender;       tev = cmnd_quit;            next = closed;              },
+{ tst  = need_sender;       tev = conn_lost;            next = closed;              },
+
+{ tst  = need_recipient;    tev = cmnd_noop;            next = need_recipient;      },
+{ tst  = need_recipient;    tev = cmnd_rcpt;            next = need_data;           },
+{ tst  = need_recipient;    tev = cmnd_rset;            next = need_sender;         },
+{ tst  = need_recipient;    tev = cmnd_quit;            next = closed;              },
+{ tst  = need_recipient;    tev = conn_lost;            next = closed;              },
+
+{ tst  = need_data;         tev = cmnd_noop;            next = need_data;           },
+{ tst  = need_data;         tev = cmnd_rcpt;            next = need_data;           },
+{ tst  = need_data;         tev = cmnd_data;            next = waiting_for_data;    },
+{ tst  = need_data;         tev = cmnd_rset;            next = need_sender;         },
+{ tst  = need_data;         tev = cmnd_quit;            next = closed;              },
+{ tst  = need_data;         tev = conn_lost;            next = closed;              },
+
+{ tst  = waiting_for_data;  tev = mail_data;            next = waiting_for_data;    },
+{ tst  = waiting_for_data;  tev = mail_end;             next = need_sender;         },
+{ tst  = waiting_for_data;  tev = conn_lost;            next = closed;              };
