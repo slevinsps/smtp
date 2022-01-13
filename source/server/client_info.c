@@ -5,16 +5,16 @@
 #include "server.h"
 #include "error_fail.h"
 
-extern struct server my_server;
+extern struct server smtp_server;
 
 void reset_client_info( int client_fd ) {
-    client_info* client = my_server.clients[ client_fd ];
+    client_info* client = smtp_server.clients[ client_fd ];
     free_mail( client->mail );
     client->mail = NULL;
 }
 
 void free_client_info( int client_fd ) {
-    client_info* client = my_server.clients[ client_fd ];
+    client_info* client = smtp_server.clients[ client_fd ];
     if ( client == NULL ) {
         return;
     }
@@ -31,12 +31,12 @@ void free_client_info( int client_fd ) {
         client->mail = NULL;
     }
     free( client );
-    my_server.clients[ client_fd ] = NULL;
+    smtp_server.clients[ client_fd ] = NULL;
 }
 
 int add_data_to_output_buffer( int client_fd, char* data )
 {
-    client_info* client = my_server.clients[ client_fd ];
+    client_info* client = smtp_server.clients[ client_fd ];
     if ( client->buffer_output == NULL ) {
         client->buffer_output = malloc( BUFFER_SIZE );
         memset(client->buffer_output, 0, BUFFER_SIZE);

@@ -32,7 +32,7 @@ void append_data_to_mail( mail* mail, char* new_data, int new_data_len ) {
     }
 
     // append data from new buffer to mail buffer
-    char* new_mail_data = concat_strings( mail->data, new_data );
+    char* new_mail_data = concat_strings( mail->data, new_data, "" );
     free( mail->data );
     mail->data = new_mail_data;
 }

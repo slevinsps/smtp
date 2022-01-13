@@ -15,28 +15,35 @@
 #include "config.h"
 #include "error_fail.h"
 #include "server_fsm_handlers.h"
+#include "helpers.h"
 
-#include "autogen/server-fsm.h"
+#include "server-fsm.h"
 
-extern struct server my_server;
+extern struct server smtp_server;
 
-int server_initialize( int port, const char* logdir )
+int server_initialize( int port, const char* logdir, const char* maildir )
 {
     printf( "Initializing server...\n" );
-    my_server.server_socket_fd = create_socket_on_port( port );
-    my_server.break_main_loop = 0;
-    my_server.clients = NULL;
-    my_server.clients_size = 0;
-    my_server.client_sockets_fds = NULL;
-    my_server.read_fds_set  = ( fd_set* ) malloc( sizeof ( fd_set ) );
-    my_server.write_fds_set = ( fd_set* ) malloc( sizeof ( fd_set ) );
-    my_server.exceptions_fds_set = ( fd_set* ) malloc( sizeof ( fd_set ) );
-    my_server.logger.dir = logdir;
+    smtp_server.server_socket_fd = create_socket_on_port( port );
+    smtp_server.break_main_loop = 0;
+    smtp_server.clients = NULL;
+    smtp_server.clients_size = 0;
+    smtp_server.client_sockets_fds = NULL;
+    smtp_server.read_fds_set  = ( fd_set* ) malloc( sizeof ( fd_set ) );
+    smtp_server.write_fds_set = ( fd_set* ) malloc( sizeof ( fd_set ) );
+    smtp_server.exceptions_fds_set = ( fd_set* ) malloc( sizeof ( fd_set ) );
+    smtp_server.logger.dir = logdir;
+    smtp_server.maildir = maildir;
+
+    int res = make_dir_if_not_exists((char*)smtp_server.maildir);
+    if ( res < 0 ) {
+        fail_on_error( "ERROR! can not make mail dir!\n" );
+    }
 
     if ( re_initialize() == 0 ) {
         fail_on_error( "Can not initialize regular expressions for parser!" );
     }
-    if ( logger_fork_and_initialize( &my_server.logger ) < 0 ) {
+    if ( logger_fork_and_initialize( &smtp_server.logger ) < 0 ) {
         fail_on_error( "Can not initialize logger!" );
     }
     printf( "Server successfully initialized.\n" );
@@ -50,30 +57,30 @@ void server_update_fd_sets()
     /* Reading server's fd set */
 
     /* Adding server socket */
-    FD_ZERO( my_server.read_fds_set );
-    FD_SET( my_server.server_socket_fd, my_server.read_fds_set );
+    FD_ZERO( smtp_server.read_fds_set );
+    FD_SET( smtp_server.server_socket_fd, smtp_server.read_fds_set );
 
-    my_server.max_fd = my_server.server_socket_fd;
+    smtp_server.max_fd = smtp_server.server_socket_fd;
 
     /* Adding clients sockets if exist */
-    node* current_client = my_server.client_sockets_fds;
+    node* current_client = smtp_server.client_sockets_fds;
     while ( current_client != NULL ) {
         printf( "Adding client to fd set.\n" );
-        FD_SET( current_client->data, my_server.read_fds_set );
-        // FD_SET( current_client->data, my_server.write_fds_set );
-        if ( current_client->data > my_server.max_fd ) {
-            my_server.max_fd = current_client->data;
+        FD_SET( current_client->data, smtp_server.read_fds_set );
+        // FD_SET( current_client->data, smtp_server.write_fds_set );
+        if ( current_client->data > smtp_server.max_fd ) {
+            smtp_server.max_fd = current_client->data;
         }
         current_client = current_client->next;
     }
 
     /* Writing server's fd set */
-    FD_ZERO( my_server.write_fds_set );
+    FD_ZERO( smtp_server.write_fds_set );
 
 
     /* Expections server's fd sets */
-    FD_ZERO( my_server.exceptions_fds_set );
-    FD_SET( my_server.server_socket_fd, my_server.exceptions_fds_set );
+    FD_ZERO( smtp_server.exceptions_fds_set );
+    FD_SET( smtp_server.server_socket_fd, smtp_server.exceptions_fds_set );
 
     printf( "Fd sets successfully updated.\n" );
 }
@@ -81,13 +88,12 @@ void server_update_fd_sets()
 int server_run() 
 {
     /* Main server loop */
-    while ( !my_server.break_main_loop ) {
-
+    while ( !smtp_server.break_main_loop ) {
         server_update_fd_sets();
 
         printf( "Waiting for pselect activity...\n" );
-        int activity = pselect( my_server.max_fd + 1, my_server.read_fds_set,
-                my_server.write_fds_set, my_server.exceptions_fds_set, NULL, NULL );
+        int activity = pselect( smtp_server.max_fd + 1, smtp_server.read_fds_set,
+                smtp_server.write_fds_set, smtp_server.exceptions_fds_set, NULL, NULL );
         
         printf( "Pselect woke up with activity: %d\n", activity );
 
@@ -102,32 +108,35 @@ int server_run()
             /* All select fd sets should be checked. */
 
             /* Checking server socket. */
-            if ( FD_ISSET( my_server.server_socket_fd, my_server.read_fds_set ) ) {
+            if ( FD_ISSET( smtp_server.server_socket_fd, smtp_server.read_fds_set ) ) {
                 handle_new_connection();
             }
 
-            if ( FD_ISSET( my_server.server_socket_fd, my_server.exceptions_fds_set ) ) {
+            if ( FD_ISSET( smtp_server.server_socket_fd, smtp_server.exceptions_fds_set ) ) {
                 fail_on_error( "Exception listen socket fd." );
             }
 
             /* Checking clients sockets. */
-            node* current_client = my_server.client_sockets_fds;
+            node* current_client = smtp_server.client_sockets_fds;
             while ( current_client != NULL ) {
-
-                if ( FD_ISSET( current_client->data, my_server.read_fds_set ) ) {
+                node* next_client = current_client->next;
+                printf("FFF %d", current_client->data);
+                if ( FD_ISSET( current_client->data, smtp_server.read_fds_set ) ) {
+                    printf("handle_client_read\n");
                     handle_client_read( current_client->data );
-                } else if ( FD_ISSET( current_client->data, my_server.write_fds_set ) ) {
+                } else if ( FD_ISSET( current_client->data, smtp_server.write_fds_set ) ) {
+                    printf("handle_client_write\n");
                     handle_client_write( current_client->data );
-                } else if ( FD_ISSET( current_client->data, my_server.exceptions_fds_set ) ) {
+                } else if ( FD_ISSET( current_client->data, smtp_server.exceptions_fds_set ) ) {
                     printf( "Exception in client with fd %i.\n", current_client->data );
                     close_client_connection( current_client->data );
                 }
-
-                current_client = current_client->next;
+                current_client = next_client;
             }
 
             break;
         }
+
     }
 
     return 0;
@@ -136,13 +145,13 @@ int server_run()
 void handle_new_connection() 
 {           
     printf( "Trying to accept new connection...\n" );
-    int client_socket_fd = accept( my_server.server_socket_fd, NULL, 0 );
+    int client_socket_fd = accept( smtp_server.server_socket_fd, NULL, 0 );
     if ( client_socket_fd < 0 ) {
         fail_on_error( "Can not accept client!" );
     }
     smtp_server_step( SMTP_SERVER_ST_INIT, SMTP_SERVER_EV_CONN_ACCEPTED,
                       client_socket_fd, NULL, 0, NULL );
-    my_server.client_sockets_fds = linked_list_add_node( my_server.client_sockets_fds,
+    smtp_server.client_sockets_fds = linked_list_add_node( smtp_server.client_sockets_fds,
             client_socket_fd );
     printf( "Client accepted and client socket added to clients array.\n" );
 }
@@ -151,7 +160,7 @@ int handle_client_read(int client_fd)
 {
     printf( "Trying to read message from client with fd %d...\n", client_fd );
 
-    client_info* client = my_server.clients[ client_fd ];
+    client_info* client = smtp_server.clients[ client_fd ];
 
     char buffer[BUFFER_SIZE];
     memset( buffer, 0, BUFFER_SIZE );
@@ -187,8 +196,11 @@ int handle_client_read(int client_fd)
             next_st = smtp_server_step(client->smtp_state,
                                        (te_smtp_server_event) cmnd, client_fd, &matchdata, matchdatalen, &matchdatasizes );
         }
-        client->smtp_state = next_st;
-        printf( "New current state for client %d is %d.\n", client_fd, client->smtp_state );
+        
+        if (next_st != SMTP_SERVER_ST_CLOSED) {
+            client->smtp_state = next_st;
+            printf( "New current state for client %d is %d.\n", client_fd, client->smtp_state );
+        }
     }
 
     return 0;
@@ -197,7 +209,7 @@ int handle_client_read(int client_fd)
 int handle_client_write( int client_fd )
 {
     printf( "Trying to write message to client with fd %d...\n", client_fd );
-    client_info* client = my_server.clients[ client_fd ];
+    client_info* client = smtp_server.clients[ client_fd ];
     if ( !client->output_is_sent ) {
         send_response_to_client( client_fd );
     }
@@ -208,15 +220,15 @@ void close_client_connection( int client_fd )
 {
     printf( "Trying to close client connection...\n" );
     close( client_fd );
-    my_server.client_sockets_fds = linked_list_delete_node( my_server.client_sockets_fds, 
+    smtp_server.client_sockets_fds = linked_list_delete_node( smtp_server.client_sockets_fds, 
         client_fd );
     printf( "Client socket is closed.\n" );
 }
 
 void server_close() 
 {
-    close( my_server.server_socket_fd );
+    close( smtp_server.server_socket_fd );
     re_finalize();
-    logger_destroy( &my_server.logger );
+    logger_destroy( &smtp_server.logger );
     printf( "Server is closed.\n" );
 }

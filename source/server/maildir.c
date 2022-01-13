@@ -9,15 +9,15 @@
 #include "config.h"
 #include "error_fail.h"
 
-void save_mail_to_maildir( mail* mail )
+void save_mail_to_maildir( mail* mail, const char* maildir )
 {
     printf( "Saving mail to maildir...\n" );
     for ( int i = 0; i < mail->recepients_num; i++ ) {
         // TODO: change PATH_TO_MAILDIR_FROM_BUILD to options or config path
-        char* path_to_user_maildir = make_maildir_for_user( PATH_TO_MAILDIR_DEFAULT, mail->recepients[ i ] );
+        char* path_to_user_maildir = make_maildir_for_user( (char*)maildir, mail->recepients[ i ] );
         char* mail_filename = generate_mail_filename();
-        char* path_to_file_in_tmp = get_path_to_mail_file( path_to_user_maildir, "/tmp/", mail_filename );
-        char* path_to_file_in_new = get_path_to_mail_file( path_to_user_maildir, "/new/", mail_filename );
+        char* path_to_file_in_tmp = get_path_to_mail_file( path_to_user_maildir, "tmp", mail_filename );
+        char* path_to_file_in_new = get_path_to_mail_file( path_to_user_maildir, "new", mail_filename );
 
         FILE* mail_fd = fopen( path_to_file_in_tmp, "a" );
         fprintf( mail_fd, "From: <%s>\r\n", mail->sender );
@@ -34,15 +34,13 @@ void save_mail_to_maildir( mail* mail )
     printf( "Saving mail to maildir finished.\n" );
 }
 
+
 char* make_subdir_if_not_exists( char* path_to_root_dir, char* new_dir_name )
 {
-    char* path_to_new_dir = concat_strings( path_to_root_dir, new_dir_name );
-    struct stat file_stat;
-    if ( stat( path_to_new_dir, &file_stat ) < 0 ) {
-        int res = mkdir( path_to_new_dir, 0700 );
-        if ( res < 0 ) {
-            fail_on_error( "ERROR! can not make dir!\n" );
-        }
+    char* path_to_new_dir = concat_strings( path_to_root_dir, new_dir_name, "/" );
+    int res = make_dir_if_not_exists(path_to_new_dir);
+    if ( res < 0 ) {
+        fail_on_error( "ERROR! can not make dir!\n" );
     }
     return path_to_new_dir;
 }
@@ -50,15 +48,15 @@ char* make_subdir_if_not_exists( char* path_to_root_dir, char* new_dir_name )
 char* make_maildir_for_user( char* path_to_root_dir, char* user_address )
 {
     char* path_to_user_dir = make_subdir_if_not_exists( path_to_root_dir, user_address );
-    char* path_to_user_maildir = make_subdir_if_not_exists( path_to_user_dir, "/Maildir" );
+    char* path_to_user_maildir = make_subdir_if_not_exists( path_to_user_dir, "Maildir" );
     free( path_to_user_dir );
 
     char* path_to_subdir = NULL;
-    path_to_subdir = make_subdir_if_not_exists( path_to_user_maildir, "/tmp" );
+    path_to_subdir = make_subdir_if_not_exists( path_to_user_maildir, "tmp" );
     free( path_to_subdir );
-    path_to_subdir = make_subdir_if_not_exists( path_to_user_maildir, "/new" );
+    path_to_subdir = make_subdir_if_not_exists( path_to_user_maildir, "new" );
     free( path_to_subdir );
-    path_to_subdir = make_subdir_if_not_exists( path_to_user_maildir, "/cur" );
+    path_to_subdir = make_subdir_if_not_exists( path_to_user_maildir, "cur" );
     free( path_to_subdir );
 
     return path_to_user_maildir;
@@ -66,8 +64,8 @@ char* make_maildir_for_user( char* path_to_root_dir, char* user_address )
 
 char* get_path_to_mail_file( char* path_to_user_maildir, char* dirname, char* filename )
 {
-    char* full_path_to_dir = concat_strings( path_to_user_maildir, dirname );
-    char* path_to_file = concat_strings( full_path_to_dir, filename );
+    char* full_path_to_dir = concat_strings( path_to_user_maildir, dirname, "/" );
+    char* path_to_file = concat_strings( full_path_to_dir, filename, "/" );
     free( full_path_to_dir );
     return path_to_file;
 }

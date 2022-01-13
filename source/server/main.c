@@ -8,7 +8,7 @@
 
 #include "server.h"
 
-struct server my_server;
+struct server smtp_server;
 
 void exit_handler( int signal ) 
 {
@@ -77,8 +77,11 @@ int main( int argc, char **argv )
     int server_port = HAVE_OPT(PORT) ? OPT_VALUE_PORT : SERVER_PORT_DEFAULT;
     printf( "server port flag value: %d.\n", server_port );
     
-    const char *logdir = HAVE_OPT(LOGDIR) ? OPT_ARG(LOGDIR) : LOGGER_DIR_DEFAULT;
+    const char* logdir = HAVE_OPT(LOGDIR) ? OPT_ARG(LOGDIR) : LOGGER_DIR_DEFAULT;
     printf( "log dir value: %s.\n", logdir );
+
+    const char* maildir = HAVE_OPT(MAILDIR) ? OPT_ARG(MAILDIR) : MAIL_DIR_DEFAULT;
+    printf( "mail dir value: %s.\n", maildir );
 
     if ( set_handler_to_signals() ) {
         printf( "Can not set handlers to signals.\n" );
@@ -86,7 +89,7 @@ int main( int argc, char **argv )
     }
 	printf( "Successfully set exit handler to signals.\n" );
 
-    server_initialize( server_port, logdir );
+    server_initialize( server_port, logdir, maildir );
     server_run();
     server_close();
 

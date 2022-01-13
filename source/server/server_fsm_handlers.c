@@ -15,12 +15,12 @@
 #include "maildir.h"
 #include "logger.h"
 
-extern struct server my_server;
+extern struct server smtp_server;
 
 int send_response_to_client(int client_fd )
 {
     printf( "Trying to send message to client with fd %d...\n", client_fd );
-    client_info* client = my_server.clients[ client_fd ];
+    client_info* client = smtp_server.clients[ client_fd ];
 
     ssize_t actual_sent = send( client_fd, client->buffer_output, strlen( client->buffer_output ), 0 );
 
@@ -61,12 +61,12 @@ int HANDLE_ACCEPTED( int client_fd, te_smtp_server_state nextState )
     }
 
     // realloc array of clients
-    if ( my_server.max_fd >= my_server.clients_size ) {
+    if ( smtp_server.max_fd >= smtp_server.clients_size ) {
         printf( "Reallocing clients array.\n" );
-        my_server.clients = realloc( my_server.clients,
-                ( my_server.max_fd / CLIENTS_REALLOC_STEP + 1) * CLIENTS_REALLOC_STEP
+        smtp_server.clients = realloc( smtp_server.clients,
+                ( smtp_server.max_fd / CLIENTS_REALLOC_STEP + 1) * CLIENTS_REALLOC_STEP
                 * sizeof( client_info* ) );
-        my_server.clients_size += CLIENTS_REALLOC_STEP;
+        smtp_server.clients_size += CLIENTS_REALLOC_STEP;
     }
 
     // initialize client_info struct for this client_fd
@@ -78,14 +78,14 @@ int HANDLE_ACCEPTED( int client_fd, te_smtp_server_state nextState )
     client->mail = NULL;
 
     // and add client to clients[]
-    my_server.clients[ client_fd ] = client;
+    smtp_server.clients[ client_fd ] = client;
 
-    logger_log_msg( &my_server.logger, LOG_MSG_TYPE_INFO, "New client accepted." );
+    logger_log_msg( &smtp_server.logger, LOG_MSG_TYPE_INFO, "New client accepted." );
 
     add_data_to_output_buffer( client_fd, RE_RESP_READY );
     send_response_to_client( client_fd );
 
-    printf( "New client current smtp state: %d\n", my_server.clients[ client_fd ]->smtp_state );
+    printf( "New client current smtp state: %d\n", smtp_server.clients[ client_fd ]->smtp_state );
     printf( "Handling accepted finished.\n" );
     return nextState;
 }
@@ -155,7 +155,7 @@ int HANDLE_CMND_EHLO( int client_fd, char*** matchdata, int matchdatalen, te_smt
 int HANDLE_CMND_MAIL( int client_fd, char*** matchdata, int matchdatalen, te_smtp_server_state nextState )
 {
     printf( "Handling command MAIL...\n" );
-    client_info* client = my_server.clients[ client_fd ];
+    client_info* client = smtp_server.clients[ client_fd ];
 
     char* email_address = NULL;
     if ( matchdatalen == 1 && ( strcmp(( *matchdata )[ matchdatalen - 1 ], "") != 0 ) ) {
@@ -166,7 +166,9 @@ int HANDLE_CMND_MAIL( int client_fd, char*** matchdata, int matchdatalen, te_smt
     }
 
     // adding sender address to client's mail
+    printf("111\n");
     client->mail = malloc(sizeof( mail ) );
+    printf("222\n");
     memset( client->mail, 0, sizeof( mail ) );
     client->mail->recepients = NULL;
     client->mail->sender = email_address;
@@ -181,7 +183,7 @@ int HANDLE_CMND_MAIL( int client_fd, char*** matchdata, int matchdatalen, te_smt
 int HANDLE_CMND_RCPT( int client_fd, char*** matchdata, int matchdatalen, te_smtp_server_state nextState )
 {
     printf( "Handling command RCPT...\n" );
-    client_info* client = my_server.clients[ client_fd ];
+    client_info* client = smtp_server.clients[ client_fd ];
 
     char* email_address = NULL;
     if ( matchdatalen == 1 && ( strcmp(( *matchdata )[ matchdatalen - 1 ], "") != 0 ) ) {
@@ -214,7 +216,7 @@ int HANDLE_CMND_RCPT( int client_fd, char*** matchdata, int matchdatalen, te_smt
 int HANDLE_CMND_DATA( int client_fd, te_smtp_server_state nextState )
 {
     printf( "Handling command DATA...\n" );
-    client_info* client = my_server.clients[ client_fd ];
+    client_info* client = smtp_server.clients[ client_fd ];
 
     // initializing a little buffer for mail data
     client->mail->data = malloc( sizeof( char ) );
@@ -231,7 +233,7 @@ int HANDLE_CMND_DATA( int client_fd, te_smtp_server_state nextState )
 int HANDLE_MAIL_DATA( int client_fd, char*** matchdata, int matchdatalen, int** matchdatasizes, te_smtp_server_state nextState )
 {
     printf( "Handling mail data...\n" );
-    client_info* client = my_server.clients[ client_fd ];
+    client_info* client = smtp_server.clients[ client_fd ];
 
     // TODO: check if two dots - delete one? (rfc 821)
 
@@ -259,11 +261,11 @@ int HANDLE_MAIL_DATA( int client_fd, char*** matchdata, int matchdatalen, int** 
 int HANDLE_MAIL_END( int client_fd, te_smtp_server_state nextState )
 {
     printf( "Handling end of mail data...\n" );
-    client_info* client = my_server.clients[ client_fd ];
+    client_info* client = smtp_server.clients[ client_fd ];
 
     add_data_to_output_buffer( client_fd, RE_RESP_OK );
     send_response_to_client( client_fd );
-    save_mail_to_maildir( client->mail );
+    save_mail_to_maildir( client->mail, smtp_server.maildir);
 
     printf( "Handling end of mail data finished.\n" );
     return nextState;

@@ -8,7 +8,7 @@
 #include "client_info.h"
 #include "logger.h"
 
-int server_initialize( int port, const char* logdir );
+int server_initialize( int port, const char* logdir, const char* maildir );
 void server_update_fd_sets();
 int server_run();
 void handle_new_connection();
@@ -36,6 +36,7 @@ struct server {
 	fd_set* exceptions_fds_set;
 
 	logger_t logger;
+	const char* maildir;
 
 	int max_fd;
 };

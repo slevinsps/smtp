@@ -136,7 +136,10 @@ int logger_open_file( logger_t* logger )
     struct stat st = {0};
 
     if (stat(logger->dir, &st) == -1) {
-        mkdir(logger->dir, 0777);
+        int res = mkdir( logger->dir, 0700 );
+        if ( res < 0 ) {
+            fail_on_error( "ERROR! can not make log dir!\n" );
+        }
     }
 
     printf( "Opening log file...\n");
