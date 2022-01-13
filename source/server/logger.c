@@ -155,17 +155,31 @@ int logger_open_file( logger_t* logger )
     return 0;
 }
 
-int logger_log_msg( logger_t* logger, log_msg_type_t msg_type, char* msg)
+int logger_log_msg( logger_t* logger, log_msg_type_t msg_type, const char *format, ...)
 {
     /* Sys MQ data for log msg */
     log_msg_t log_msg;
     log_msg.msg_type = 1;
     ssize_t log_msg_sz  = sizeof( log_msg.msg_text );
-
     /* create full log message string */
     char* timestring = logger_get_log_time();
     char* typestring = logger_get_log_type( msg_type );
-    sprintf( log_msg.msg_text, "%s\t%s\t%s", timestring, typestring, msg );
+
+    char* string;
+    va_list args;
+
+    va_start(args, format);
+    if(vasprintf(&string, format, args) < 0) {
+        string = NULL;    //this is for logging, so failed allocation is not fatal
+    }
+    va_end(args);
+
+    if(string) {
+        sprintf( log_msg.msg_text, "%s\t%s\t%s", timestring, typestring, string );
+        free(string);
+    } else {
+        sprintf( log_msg.msg_text, "%s", "Error while logging a message: Memory allocation failed.\n");
+    }
 
     /* Send log message to logger_listener */
     if ( ( msgsnd( logger->msg_queue_id, &log_msg, log_msg_sz, IPC_NOWAIT ) ) < 0 ) {
