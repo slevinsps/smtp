@@ -90,7 +90,7 @@ int HANDLE_ACCEPTED( int client_fd, te_smtp_server_state nextState )
     return nextState;
 }
 
-int HANDLE_CMND_HELO( int client_fd, char*** matchdata, int matchdatalen, te_smtp_server_state nextState )
+int HANDLE_CMND_HELO( int client_fd, const char* matchdata, te_smtp_server_state nextState )
 {
     logger_log_msg( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command HELO..." );
 
@@ -98,10 +98,11 @@ int HANDLE_CMND_HELO( int client_fd, char*** matchdata, int matchdatalen, te_smt
 
     /* compare command data address and real client ip address */
 
-    char* host = NULL;
-    if ( matchdatalen == 1 ) {
-        host = ( *matchdata )[ matchdatalen - 1 ];
+    const char* host = NULL;
+    if ( matchdata && strlen(matchdata) > 0 ) {
+        host = matchdata;
     }
+
     logger_log_msg( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Host: %s", host );
 
     char* host_ip = get_socket_ip_address( client_fd );
@@ -121,17 +122,18 @@ int HANDLE_CMND_HELO( int client_fd, char*** matchdata, int matchdatalen, te_smt
     return nextState;
 }
 
-int HANDLE_CMND_EHLO( int client_fd, char*** matchdata, int matchdatalen, te_smtp_server_state nextState )
+int HANDLE_CMND_EHLO( int client_fd, const char* matchdata, te_smtp_server_state nextState )
 {
     logger_log_msg( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handle command EHLO." );
     // TODO: add DNS checking
 
     /* compare command data address and real client ip address */
 
-    char* host = NULL;
-    if ( matchdatalen == 1 ) {
-        host = ( *matchdata )[ matchdatalen - 1 ];
+    const char* host = NULL;
+    if ( matchdata && strlen(matchdata) > 0 ) {
+        host = matchdata;
     }
+
     logger_log_msg( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Host: %s", host );
 
     char* host_ip = get_socket_ip_address( client_fd );
@@ -152,14 +154,15 @@ int HANDLE_CMND_EHLO( int client_fd, char*** matchdata, int matchdatalen, te_smt
     return nextState;
 }
 
-int HANDLE_CMND_MAIL( int client_fd, char*** matchdata, int matchdatalen, te_smtp_server_state nextState )
+int HANDLE_CMND_MAIL( int client_fd, const char* matchdata, te_smtp_server_state nextState )
 {
     logger_log_msg( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command MAIL..." );
     client_info* client = smtp_server.clients[ client_fd ];
 
     char* email_address = NULL;
-    if ( matchdatalen == 1 && ( strcmp(( *matchdata )[ matchdatalen - 1 ], "") != 0 ) ) {
-        email_address = ( *matchdata )[ matchdatalen - 1 ];
+    if ( matchdata && strlen(matchdata) > 0 ) {
+        email_address = strdup(matchdata);
+        
         logger_log_msg( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: 'Mail from' email address: %s.", email_address );
     } else {
         logger_log_msg( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: 'Mail from' without email address." );
@@ -178,14 +181,14 @@ int HANDLE_CMND_MAIL( int client_fd, char*** matchdata, int matchdatalen, te_smt
     return nextState;
 }
 
-int HANDLE_CMND_RCPT( int client_fd, char*** matchdata, int matchdatalen, te_smtp_server_state nextState )
+int HANDLE_CMND_RCPT( int client_fd, const char* matchdata, te_smtp_server_state nextState )
 {
     logger_log_msg( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command RCPT..." );
     client_info* client = smtp_server.clients[ client_fd ];
 
     char* email_address = NULL;
-    if ( matchdatalen == 1 && ( strcmp(( *matchdata )[ matchdatalen - 1 ], "") != 0 ) ) {
-        email_address = ( *matchdata )[ matchdatalen - 1 ];
+    if ( matchdata && strlen(matchdata) > 0 ) {
+        email_address = strdup(matchdata);;
         logger_log_msg( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: 'Rcpt to' email address: %s.", email_address );
     } else {
         logger_log_msg( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: 'Rcpt to' without email address." );
@@ -228,30 +231,32 @@ int HANDLE_CMND_DATA( int client_fd, te_smtp_server_state nextState )
     return nextState;
 }
 
-int HANDLE_MAIL_DATA( int client_fd, char*** matchdata, int matchdatalen, int** matchdatasizes, te_smtp_server_state nextState )
+int HANDLE_MAIL_DATA( int client_fd, const char* matchdata,  te_smtp_server_state nextState )
 {
     logger_log_msg( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling mail data..." );
     client_info* client = smtp_server.clients[ client_fd ];
 
+    append_data_to_mail( client->mail, client->buffer_input, strlen( client->buffer_input ) );
+
     // TODO: check if two dots - delete one? (rfc 821)
 
-    if ( matchdatalen == 2 ) {
-        char* mail_data = ( *matchdata )[ matchdatalen - 2 ];
+    // if ( matchdatalen == 2 ) {
+    //     char* mail_data = ( *matchdata )[ matchdatalen - 2 ];
 
-        if ( *( matchdatasizes[ matchdatalen - 2] ) == 0 ) {
-            append_data_to_mail( client->mail, client->buffer_input, strlen( client->buffer_input ) );
-        } else {
-            append_data_to_mail( client->mail, mail_data, *( matchdatasizes[ matchdatalen - 2] ) );
-        }
+    //     if ( *( matchdatasizes[ matchdatalen - 2] ) == 0 ) {
+    //         append_data_to_mail( client->mail, client->buffer_input, strlen( client->buffer_input ) );
+    //     } else {
+    //         append_data_to_mail( client->mail, mail_data, *( matchdatasizes[ matchdatalen - 2] ) );
+    //     }
 
-        char* mail_end = ( *matchdata )[ matchdatalen - 1 ];
-        if ( strlen( mail_end ) > 0 ) {
-            nextState = smtp_server_step( client->smtp_state,
-                    SMTP_SERVER_EV_MAIL_END, client_fd, matchdata, matchdatalen, matchdatasizes );
-        }
-    } else {
-        append_data_to_mail( client->mail, client->buffer_input, strlen( client->buffer_input ) );
-    }
+    //     char* mail_end = ( *matchdata )[ matchdatalen - 1 ];
+    //     if ( strlen( mail_end ) > 0 ) {
+    //         nextState = smtp_server_step( client->smtp_state,
+    //                 SMTP_SERVER_EV_MAIL_END, client_fd, matchdata, matchdatalen, matchdatasizes );
+    //     }
+    // } else {
+    //     append_data_to_mail( client->mail, client->buffer_input, strlen( client->buffer_input ) );
+    // }
 
     return nextState;
 }

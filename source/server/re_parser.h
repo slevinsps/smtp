@@ -2,9 +2,10 @@
 #define SMTP_MTA_PARSER_H
 
 #define PCRE2_CODE_UNIT_WIDTH 8
-#include "pcre2.h"
+#include <pcre.h>  
 
-#include "autogen/server-fsm.h"
+
+#include "server-fsm.h"
 #include "rexprs.h"
 
 typedef enum {
@@ -22,11 +23,13 @@ typedef enum {
     SMTP_RE_ERROR = SMTP_SERVER_EV_INVALID
 } smtp_re_commands;
 #define SMTP_RE_CMNDS_COUNTER 11 // smtp_re_commands - 1 (error code)
-
+#define SUB_STR_VEC_LEN 10
 
 int re_initialize();
 int re_finalize();
 int re_compile( smtp_re_commands re_pattern_name );
-smtp_re_commands re_match_for_command( const char* text, char*** matchdata, int* matchdatalen, int** matchdatasizes );
+smtp_re_commands re_match_for_command( const char* text, const char** matchdata );
+void free_match_data(const char* match_data);
+
 
 #endif //SMTP_MTA_PARSER_H
