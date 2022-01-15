@@ -42,8 +42,8 @@ typedef struct {
     int msg_queue_id;
 } logger_t;
 
-int logger_fork_and_initialize( logger_t* logger_sender );
-int logger_log_msg( logger_t* logger, log_msg_type_t msg_type, const char *format, ...);
+int initialize_logger( logger_t* logger_sender );
+int log_info( logger_t* logger, log_msg_type_t msg_type, const char *format, ...);
 void logger_destroy( logger_t* logger );
 
 int logger_init_mq( logger_t* logger );

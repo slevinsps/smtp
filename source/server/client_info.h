@@ -10,12 +10,12 @@ struct client_info {
     int socket_fd;
     char* buffer_input;
     char* buffer_output;
-    int output_is_sent;
+    int sent_output_flag;
     mail* mail;
 };
 
 void reset_client_info( int client_fd );
 void free_client_info( int client_fd );
-int add_data_to_output_buffer( int client_fd, char* data );
+int add_data_to_buffer( int client_fd, char* data );
 
 #endif //SMTP_MTA_CLIENT_INFO_H

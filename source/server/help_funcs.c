@@ -3,7 +3,7 @@
 #include <string.h>
 #include <sys/stat.h>
 
-#include "helpers.h"
+#include "help_funcs.h"
 #include "config.h"
 #include "error_fail.h"
 
@@ -43,7 +43,7 @@ char* concat_strings( char* s1, char* s2, char* sep ) {
     return result;
 }
 
-int make_dir_if_not_exists( char* path_to_dir)
+int make_dir( char* path_to_dir)
 {
     int res = 0;
     struct stat file_stat;

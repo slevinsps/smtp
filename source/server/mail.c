@@ -4,7 +4,7 @@
 
 #include "mail.h"
 #include "config.h"
-#include "helpers.h"
+#include "help_funcs.h"
 
 void free_mail( mail* mail ) {
     if ( mail->sender != NULL ) {
@@ -25,7 +25,7 @@ void free_mail( mail* mail ) {
     free( mail );
 }
 
-void append_data_to_mail( mail* mail, char* new_data, int new_data_len ) {
+void add_data_to_mail( mail* mail, char* new_data, int new_data_len ) {
     // realloc if needed
     if ( strlen( mail->data ) + strlen( new_data ) + 1 >= mail->data_capacity ) { // +1 char for newline
         mail->data = realloc_mail_data_for_length( mail, new_data_len );

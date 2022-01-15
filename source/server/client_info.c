@@ -34,7 +34,7 @@ void free_client_info( int client_fd ) {
     smtp_server.clients[ client_fd ] = NULL;
 }
 
-int add_data_to_output_buffer( int client_fd, char* data )
+int add_data_to_buffer( int client_fd, char* data )
 {
     client_info* client = smtp_server.clients[ client_fd ];
     if ( client->buffer_output == NULL ) {
@@ -42,9 +42,9 @@ int add_data_to_output_buffer( int client_fd, char* data )
         memset(client->buffer_output, 0, BUFFER_SIZE);
     }
     if ( strlen( client->buffer_output ) + strlen( data ) >= BUFFER_SIZE ) {
-        fail_on_error( "Output buffer for client is full" );
+        handle_error( "Output buffer for client is full" );
     }
     sprintf( client->buffer_output + strlen( client->buffer_output ), "%s", data );
-    client->output_is_sent = 0;
+    client->sent_output_flag = 0;
     return 0;
 }

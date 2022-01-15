@@ -11,14 +11,14 @@
 
 #include "logger.h"
 #include "error_fail.h"
-#include "helpers.h"
+#include "help_funcs.h"
 #include "server.h"
 
 #include "serveropts.h"
 
 
 
-int logger_fork_and_initialize( logger_t* logger_sender )
+int initialize_logger( logger_t* logger_sender )
 {
     printf( "Logger: fork and init.\n" );
     pid_t pid;
@@ -55,7 +55,7 @@ int logger_init_mq( logger_t* logger )
     logger->msg_queue_key = LOGGER_QUEUE_KEY;
 
     if ( ( logger->msg_queue_id = msgget( logger->msg_queue_key, 0666 | IPC_CREAT) ) < 0) {
-        fail_on_error("logger_initialize(): msgget()");
+        handle_error("logger_initialize(): msgget()");
     }
 
     printf( "Logger: initialized ok.\n" );
@@ -138,7 +138,7 @@ int logger_open_file( logger_t* logger )
     if (stat(logger->dir, &st) == -1) {
         int res = mkdir( logger->dir, 0700 );
         if ( res < 0 ) {
-            fail_on_error( "ERROR! can not make log dir!\n" );
+            handle_error( "ERROR! can not make log dir!\n" );
         }
     }
 
@@ -148,14 +148,14 @@ int logger_open_file( logger_t* logger )
     printf( "Logger: filename is %s\n", logger->filename );
     FILE* log_fd = fopen( logger->filename, "a" );
     if ( log_fd == NULL ) {
-        fail_on_error( "Logger: can't open file!" );
+        handle_error( "Logger: can't open file!" );
     }
     logger->file = log_fd;
     printf( "Opening log file finished.\n");
     return 0;
 }
 
-int logger_log_msg( logger_t* logger, log_msg_type_t msg_type, const char *format, ...)
+int log_info( logger_t* logger, log_msg_type_t msg_type, const char *format, ...)
 {
     /* Sys MQ data for log msg */
     log_msg_t log_msg;
@@ -183,7 +183,7 @@ int logger_log_msg( logger_t* logger, log_msg_type_t msg_type, const char *forma
 
     /* Send log message to logger_listener */
     if ( ( msgsnd( logger->msg_queue_id, &log_msg, log_msg_sz, IPC_NOWAIT ) ) < 0 ) {
-        printf("ERROR logger_log_msg(): msgsnd()\n");
+        printf("ERROR log_info(): msgsnd()\n");
         return 1;
     }
 

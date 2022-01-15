@@ -4,7 +4,7 @@
 #include "re_parser.h"
 #include "error_fail.h"
 
-// Regular Expressions patterns for SMTP commands from smtp_re_commands
+// Regular Expressions patterns for SMTP commands from re_commands
 const char* smtp_re_patterns[ SMTP_RE_CMNDS_COUNTER ] = {
         RE_CMND_NOOP,
         RE_CMND_HELO,
@@ -23,29 +23,29 @@ const char* smtp_re_patterns[ SMTP_RE_CMNDS_COUNTER ] = {
 pcre* smtp_re_compiled[ SMTP_RE_CMNDS_COUNTER ];
 pcre_extra* smtp_re_compiled_extra[ SMTP_RE_CMNDS_COUNTER ];
 
-int re_initialize() {
-    printf( "Initializing Reg Expressions with PCRE2 library...\n" );
+int initialize_reg() {
+    printf( "Initializing Reg Expressions with PCRE...\n" );
     int code = 0;
 
     for ( int re_name = 0; re_name < SMTP_RE_CMNDS_COUNTER; re_name++ ) {
-        code |= re_compile( re_name );
-        printf( "Debug: Re compiled reg exp %d with result code %d.\n", re_name, code );
+        code |= compile_reg( re_name );
     }
-
+    printf( "Reg Expressions with PCRE Initialized.\n" );
     return !code;
 }
 
-int re_finalize() {
-    printf( "Finalizing PCRE2 regular expressions...\n" );
+int finalize_reg() {
+    printf( "Finalizing PCRE regular expressions...\n" );
     for ( int re_name = 0; re_name < SMTP_RE_CMNDS_COUNTER; re_name++ ) {
         free( smtp_re_compiled[ re_name ] );
+        free( smtp_re_compiled_extra[ re_name ]);
     }
 
-    printf( "PCRE2 regular expessions finalized.\n" );
+    printf( "PCRE regular expessions finalized.\n" );
     return 0;
 }
 
-int re_compile( smtp_re_commands re_pattern_name )
+int compile_reg( re_commands re_pattern_name )
 {
     const char *pcre_error;
     int pcre_error_offset;
@@ -67,7 +67,7 @@ int re_compile( smtp_re_commands re_pattern_name )
     return 0;
 }
 
-smtp_re_commands re_match_for_command( const char* text, const char** matchdata )
+re_commands match_reg( const char* text, const char** matchdata )
 {
     int sub_str_vec[SUB_STR_VEC_LEN];
     int i;

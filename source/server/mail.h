@@ -11,7 +11,7 @@ struct mail {
 };
 
 void free_mail( mail* mail );
-void append_data_to_mail( mail* mail, char* new_data, int new_data_len );
+void add_data_to_mail( mail* mail, char* new_data, int new_data_len );
 
 char* realloc_mail_data_for_length( mail* mail, int len );
 

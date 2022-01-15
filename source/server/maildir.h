@@ -3,7 +3,7 @@
 
 #include "mail.h"
 
-void save_mail_to_maildir( mail* mail, const char* maildir );
+void save_mail_to_dir( mail* mail, const char* maildir );
 
 char* make_subdir_if_not_exists( char* path_to_root_dir, char* new_dir_name );
 char* make_maildir_for_user(char* path_to_root_dir, char* user_address );

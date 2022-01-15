@@ -6,7 +6,7 @@
 
 
 #include "server-fsm.h"
-#include "rexprs.h"
+#include "reg_exprs.h"
 
 typedef enum {
     SMTP_RE_CMND_NOOP = SMTP_SERVER_EV_CMND_NOOP,
@@ -21,14 +21,14 @@ typedef enum {
     SMTP_RE_MAIL_END = SMTP_SERVER_EV_MAIL_END,
     SMTP_RE_MAIL_DATA = SMTP_SERVER_EV_MAIL_DATA,
     SMTP_RE_ERROR = SMTP_SERVER_EV_INVALID
-} smtp_re_commands;
-#define SMTP_RE_CMNDS_COUNTER 11 // smtp_re_commands - 1 (error code)
+} re_commands;
+#define SMTP_RE_CMNDS_COUNTER 11 // re_commands - 1 (error code)
 #define SUB_STR_VEC_LEN 10
 
-int re_initialize();
-int re_finalize();
-int re_compile( smtp_re_commands re_pattern_name );
-smtp_re_commands re_match_for_command( const char* text, const char** matchdata );
+int initialize_reg();
+int finalize_reg();
+int compile_reg( re_commands re_pattern_name );
+re_commands match_reg( const char* text, const char** matchdata );
 void free_match_data(const char* match_data);
 
 

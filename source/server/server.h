@@ -8,14 +8,14 @@
 #include "client_info.h"
 #include "logger.h"
 
-int server_initialize( int port, const char* logdir, const char* maildir );
-void server_update_fd_sets();
-int server_run();
-void handle_new_connection();
+int initialize_server( int port, const char* logdir, const char* maildir );
+void server_update_fds();
+int run_server();
+void handle_new_connect();
 int handle_client_read( int client_fd );
 int handle_client_write( int client_fd );
 void close_client_connection( int client_fd );
-void server_close();
+void close_server();
 
 typedef struct {
 	int server_port;
@@ -25,15 +25,15 @@ typedef struct {
 
 struct server {
 	int server_socket_fd;
-	int break_main_loop;
+	int break_loop;
 
 	client_info** clients;
 	int clients_size;
 	node* client_sockets_fds;
 
-	fd_set* read_fds_set;
-	fd_set* write_fds_set;
-	fd_set* exceptions_fds_set;
+	fd_set* read_fds;
+	fd_set* write_fds;
+	fd_set* exceptions_fds;
 
 	logger_t logger;
 	const char* maildir;

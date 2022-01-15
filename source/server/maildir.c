@@ -5,15 +5,15 @@
 #include <errno.h>
 
 #include "maildir.h"
-#include "helpers.h"
+#include "help_funcs.h"
 #include "config.h"
 #include "error_fail.h"
 
-void save_mail_to_maildir( mail* mail, const char* maildir )
+void save_mail_to_dir( mail* mail, const char* maildir )
 {
     printf( "Saving mail to maildir...\n" );
     for ( int i = 0; i < mail->recepients_num; i++ ) {
-        // TODO: change PATH_TO_MAILDIR_FROM_BUILD to options or config path
+
         char* path_to_user_maildir = make_maildir_for_user( (char*)maildir, mail->recepients[ i ] );
         char* mail_filename = generate_mail_filename();
         char* path_to_file_in_tmp = get_path_to_mail_file( path_to_user_maildir, "tmp", mail_filename );
@@ -38,9 +38,9 @@ void save_mail_to_maildir( mail* mail, const char* maildir )
 char* make_subdir_if_not_exists( char* path_to_root_dir, char* new_dir_name )
 {
     char* path_to_new_dir = concat_strings( path_to_root_dir, new_dir_name, "/" );
-    int res = make_dir_if_not_exists(path_to_new_dir);
+    int res = make_dir(path_to_new_dir);
     if ( res < 0 ) {
-        fail_on_error( "ERROR! can not make dir!\n" );
+        handle_error( "ERROR! can not make dir!\n" );
     }
     return path_to_new_dir;
 }

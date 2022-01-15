@@ -14,7 +14,7 @@ echo "DATA"
 sleep 0.1
 echo "Hi there"
 sleep 0.1
-echo "and hi here!:) AAAAAAAAAAAAAAAA ."
+echo "and hi here!:) testsss"
 sleep 0.1
 echo "."
 sleep 0.1
