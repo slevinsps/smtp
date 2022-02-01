@@ -17,7 +17,8 @@ int HANDLE_CMND_DATA( int client_fd, te_smtp_server_state nextState );
 int HANDLE_MAIL_DATA( int client_fd, const char* matchdata, te_smtp_server_state nextState );
 int HANDLE_MAIL_END( int client_fd, te_smtp_server_state nextState );
 int HANDLE_CMND_RSET( int client_fd, te_smtp_server_state nextState );
-int HANDLE_CLOSE( int client_fd, te_smtp_server_state nextState );
+int HANDLE_CMND_CLOSE( int client_fd, te_smtp_server_state nextState );
+int HANDLE_CMND_VRFY( int client_fd, te_smtp_server_state nextState );
 
 int HANDLE_ERROR( int client_fd, te_smtp_server_state nextState );
 

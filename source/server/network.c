@@ -7,7 +7,8 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <arpa/inet.h>
-
+#include <sys/socket.h>
+#include <netdb.h>
 #include "network.h"
 #include "error_fail.h"
 
@@ -45,7 +46,7 @@ int create_socket( int port )
 }
 
 
-char* get_socket_ip_address( int socket_fd ) {
+char* reverse_dns_lookup( int socket_fd ) {
     struct sockaddr_in peer;
     unsigned int peer_len = sizeof( peer );
 
@@ -53,9 +54,11 @@ char* get_socket_ip_address( int socket_fd ) {
         handle_error( "getpeername() failed" );
     }
 
-    char* host_ip = inet_ntoa( peer.sin_addr );
+    char* hostname = calloc(NI_MAXHOST, sizeof(char));
 
-    return host_ip;
+    getnameinfo(( struct sockaddr* )( &peer ), sizeof(struct sockaddr), hostname, NI_MAXHOST, NULL, 0, 0);
+
+    return hostname;
 }
 
 int nonblocking_socket( int socket_fd ) {

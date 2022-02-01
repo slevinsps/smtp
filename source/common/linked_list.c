@@ -9,7 +9,7 @@ node* linked_list_add_node( node *head, int data_to_add )
     node *new_node = ( node* ) malloc( sizeof( node ) );
 
     if( new_node == NULL ){
-        fail_on_error("Unable to allocate memory for new fd node");
+        handle_error("Unable to allocate memory for new fd node");
     }
 
     new_node->data = data_to_add;

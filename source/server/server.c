@@ -183,7 +183,7 @@ int handle_client_read(int client_fd)
 
         te_smtp_server_state next_state;
         if ( cmnd == SMTP_RE_MAIL_DATA &&
-            client->smtp_state != SMTP_SERVER_ST_WAITING_FOR_DATA ) {
+            client->smtp_state != SMTP_SERVER_ST_DATA ) {
             log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Reg exp command is invalid." );
             smtp_server_step( client->smtp_state,
                     SMTP_SERVER_EV_INVALID, client_fd, matchdata);

@@ -95,10 +95,6 @@ int HANDLE_CMND_HELO( int client_fd, const char* matchdata, te_smtp_server_state
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command HELO..." );
 
-    // TODO: add DNS checking
-
-    /* compare command data address and real client ip address */
-
     const char* host = NULL;
     if ( matchdata && strlen(matchdata) > 0 ) {
         host = matchdata;
@@ -106,13 +102,14 @@ int HANDLE_CMND_HELO( int client_fd, const char* matchdata, te_smtp_server_state
 
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Host: %s", host );
 
-    char* host_ip = get_socket_ip_address( client_fd );
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Peer's IP address is: %s", host_ip );
+    
 
-    if ( strcmp( host, host_ip ) == 0 ) {
+    char* host_reverse = reverse_dns_lookup( client_fd );
+    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Peer address is: %s", host_reverse );
+
+    if ( strcmp( host, host_reverse ) == 0 ) {
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is verified.", client_fd );
     } else {
-        // it doesn't matter
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is not verified!", client_fd );
     }
 
@@ -126,9 +123,6 @@ int HANDLE_CMND_HELO( int client_fd, const char* matchdata, te_smtp_server_state
 int HANDLE_CMND_EHLO( int client_fd, const char* matchdata, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handle command EHLO." );
-    // TODO: add DNS checking
-
-    /* compare command data address and real client ip address */
 
     const char* host = NULL;
     if ( matchdata && strlen(matchdata) > 0 ) {
@@ -137,10 +131,10 @@ int HANDLE_CMND_EHLO( int client_fd, const char* matchdata, te_smtp_server_state
 
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Host: %s", host );
 
-    char* host_ip = get_socket_ip_address( client_fd );
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Peer's IP address is: %s", host_ip );
+    char* host_reverse = reverse_dns_lookup( client_fd );
+    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Peer address is: %s", host_reverse );
 
-    if ( strcmp( host, host_ip ) == 0 ) {
+    if ( strcmp( host, host_reverse ) == 0 ) {
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is verified.\r", client_fd );
     } else {
         // it doesn't matter
@@ -275,6 +269,17 @@ int HANDLE_MAIL_END( int client_fd, te_smtp_server_state nextState )
     return nextState;
 }
 
+int HANDLE_CMND_VRFY( int client_fd, te_smtp_server_state nextState )
+{
+    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command VRFY..." );
+
+    add_data_to_buffer( client_fd, RE_RESP_ERR_NOT_IMPL_CMND );
+    response_to_client( client_fd );
+
+    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command VRFY finished." );
+    return nextState;
+}
+
 int HANDLE_CMND_RSET( int client_fd, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handle command RSET." );
@@ -285,7 +290,7 @@ int HANDLE_CMND_RSET( int client_fd, te_smtp_server_state nextState )
     return nextState;
 }
 
-int HANDLE_CLOSE( int client_fd, te_smtp_server_state nextState )
+int HANDLE_CMND_CLOSE( int client_fd, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling close..." );
     add_data_to_buffer( client_fd, RE_RESP_CLOSE );
