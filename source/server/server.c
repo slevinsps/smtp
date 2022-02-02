@@ -182,18 +182,11 @@ int handle_client_read(int client_fd)
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Reg find command %d with match data = %s", cmnd, matchdata);
 
         te_smtp_server_state next_state;
-        if ( cmnd == SMTP_RE_MAIL_DATA &&
-            client->smtp_state != SMTP_SERVER_ST_DATA ) {
-            log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Reg exp command is invalid." );
-            smtp_server_step( client->smtp_state,
-                    SMTP_SERVER_EV_INVALID, client_fd, matchdata);
-            next_state = client->smtp_state;
-        } else {
-            next_state = smtp_server_step(client->smtp_state,
+
+        next_state = smtp_server_step(client->smtp_state,
                                        (te_smtp_server_event) cmnd, client_fd, matchdata);
-        }
         
-        if (next_state != SMTP_SERVER_ST_CLOSED) {
+        if (next_state != SMTP_SERVER_ST_CLOSED && next_state != SMTP_SERVER_ST_INVALID) {
             client->smtp_state = next_state;
             log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "New current state for client %d is %d.", client_fd, client->smtp_state );
         }

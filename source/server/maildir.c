@@ -12,8 +12,8 @@
 void save_mail_to_dir( mail* mail, const char* maildir )
 {
     printf( "Saving mail to maildir...\n" );
+    printf( "Recepients number = %d\n", mail->recepients_num);
     for ( int i = 0; i < mail->recepients_num; i++ ) {
-
         char* path_to_user_maildir = make_maildir_for_user( (char*)maildir, mail->recepients[ i ] );
         char* mail_filename = generate_mail_filename();
         char* path_to_file_in_tmp = get_path_to_mail_file( path_to_user_maildir, "tmp", mail_filename );
