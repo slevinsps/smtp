@@ -4,7 +4,7 @@
 /* COMMON: */
 
 #define RE_CRLF "\\r\\n"
-#define RE_SPACE "\\s*"
+#define RE_SPACE "\\s+"
 #define RE_DOMAIN "(?<domain>.+)"
 #define RE_EMAIL_OR_EMPTY "<(?<address>.+@.+)>|<>"
 #define RE_EMAIL "<(?<address>.+@.+)>"
@@ -22,7 +22,6 @@
 #define RE_CMND_DATA "[Dd][Aa][Tt][Aa]" RE_CRLF
 #define RE_CMND_RSET "[Rr][Ss][Ee][Tt]" RE_CRLF
 #define RE_CMND_QUIT "[Qq][Uu][Ii][Tt]" RE_CRLF
-
 /* MAIL CONTENT: */
 
 #define RE_MAIL_END "^\\." RE_CRLF

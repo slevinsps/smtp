@@ -276,7 +276,7 @@ static void
 doOptPort(tOptions* pOptions, tOptDesc* pOptDesc)
 {
     static struct {long rmin, rmax;} const rng[2] = {
-        { 110, LONG_MIN },  { 1024, 65000 } };
+        { 110, LONG_MIN },  { 20, 65000 } };
     int  ix;
 
     if (pOptions <= OPTPROC_EMIT_LIMIT)

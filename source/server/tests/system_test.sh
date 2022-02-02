@@ -16,7 +16,7 @@ echo "RCPT TO:   <test2@local.ru>"
 sleep 0.1
 echo "dfdfdf"
 sleep 0.1
-echo "RCPT TO:   <test3@local.ru>"
+echo "RCPT TO: <test3@locafef.ru>"
 sleep 0.1
 echo "DATA"
 sleep 0.1
@@ -24,7 +24,7 @@ echo "Hi there"
 sleep 0.1
 echo "and hi here!:) testsss . Hey ffff."
 sleep 0.1
-echo ". and hi here!:) testsss"
+echo ". and hi here!:) testsss привеееет"
 sleep 0.1
 echo "."
 sleep 0.1

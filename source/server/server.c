@@ -178,13 +178,14 @@ int handle_client_read(int client_fd)
 
         // parse for command and send response
         const char* matchdata = NULL;
+
         re_commands cmnd = match_reg( client->buffer_input, &matchdata);
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Reg find command %d with match data = %s", cmnd, matchdata);
 
         te_smtp_server_state next_state;
 
         next_state = smtp_server_step(client->smtp_state,
-                                       (te_smtp_server_event) cmnd, client_fd, matchdata);
+                                    (te_smtp_server_event) cmnd, client_fd, matchdata);
         
         if (next_state != SMTP_SERVER_ST_CLOSED && next_state != SMTP_SERVER_ST_INVALID) {
             client->smtp_state = next_state;

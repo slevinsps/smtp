@@ -1,7 +1,6 @@
 #ifndef SMTP_MTA_PARSER_H
 #define SMTP_MTA_PARSER_H
 
-#define PCRE2_CODE_UNIT_WIDTH 8
 #include <pcre.h>  
 
 
@@ -22,7 +21,7 @@ typedef enum {
     SMTP_RE_MAIL_DATA = SMTP_SERVER_EV_MAIL_DATA,
     SMTP_RE_ERROR = SMTP_SERVER_EV_INVALID
 } re_commands;
-#define SMTP_RE_CMNDS_COUNTER 11 // re_commands - 1 (error code)
+#define SMTP_RE_CMNDS_COUNTER 10
 #define SUB_STR_VEC_LEN 10
 
 int initialize_reg();

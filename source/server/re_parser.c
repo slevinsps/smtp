@@ -15,9 +15,8 @@ const char* smtp_re_patterns[ SMTP_RE_CMNDS_COUNTER ] = {
         RE_CMND_DATA,
         RE_CMND_RSET,
         RE_CMND_QUIT,
-        RE_MAIL_END,
-        RE_MAIL_DATA
-};
+        RE_MAIL_END
+    };
 
 // Regular expressions compiled with PCRE2
 pcre* smtp_re_compiled[ SMTP_RE_CMNDS_COUNTER ];
@@ -85,6 +84,8 @@ re_commands match_reg( const char* text, const char** matchdata )
             break;
         }
     }
+
+    // если возвращает 10, то он не заматчился ни с какой командой и воспринимаем это как текст mail а
 
     return i;    
 }
