@@ -56,5 +56,5 @@ generate_fsm_images:
 
 # TEX FILES GENERATION:
 
-./tex/regexp/smtp_re.tex: ./../source/server/rexprs.h
-	$(RE2TEX) ./../source/server/rexprs.h $(TEX_REGEXP_DIR)
+./tex/regexp/smtp_re.tex: ./../source/server/reg_exprs.h
+	$(RE2TEX) ./../source/server/reg_exprs.h $(TEX_REGEXP_DIR)

@@ -1,0 +1,421 @@
+INFO 	2022-02-04T21:51:19	SMTP client is successfully launched2.
+INFO 	2022-02-04T21:51:19	filename is ./dir/wrk/mail6.eml
+INFO 	2022-02-04T21:51:19	[READ]1 line from file: 23/10 From: <ivan@gmail.com>
+
+INFO 	2022-02-04T21:51:19	[READ]2 line from file: 23/10 From: <ivan@gmail.com>
+
+INFO 	2022-02-04T21:51:19	[READ]1 line from file: 23/10 To: <test3@locafef.ru>
+
+INFO 	2022-02-04T21:51:19	[READ]2 line from file: 23/10 To: <test3@locafef.ru>
+
+ERROR 	2022-02-04T21:51:23	no ip found. Lets use localhost
+INFO 	2022-02-04T21:51:23	[CONNECTION]ADDR: 127.0.0.1:1026
+
+INFO 	2022-02-04T21:51:23	[CONNECTION]SET EVENTS - POLLIN: 1
+
+INFO 	2022-02-04T21:51:23	[MX] locafef.ru:127.0.0.1 active
+INFO 	2022-02-04T21:51:23	1 MX found
+INFO 	2022-02-04T21:51:23	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:51:23	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:23	From server: 220 Service ready
+
+INFO 	2022-02-04T21:51:23	Server reply status check 1 at msg stage 0
+INFO 	2022-02-04T21:51:23	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-04T21:51:23	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[0],w[4])
+INFO 	2022-02-04T21:51:23	Pollout MSG to locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:23	address is 127.0.0.1
+INFO 	2022-02-04T21:51:23	[SEND] Send 16 bytes of msg: EHLO localhost
+
+INFO 	2022-02-04T21:51:23	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-04T21:51:23	[MSG Context] set stage from 'NONE' to 'EHLO'
+INFO 	2022-02-04T21:51:23	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:51:23	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:23	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-04T21:51:23	Server reply status check 1 at msg stage 1
+INFO 	2022-02-04T21:51:23	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-04T21:51:23	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[0],w[4])
+INFO 	2022-02-04T21:51:23	Pollout MSG to locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:23	msg is 28/10/MAIL FROM: <ivan@gmail.com>
+
+INFO 	2022-02-04T21:51:23	[SEND] Send 28 bytes of msg: MAIL FROM: <ivan@gmail.com>
+
+INFO 	2022-02-04T21:51:23	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-04T21:51:23	[MSG Context] set stage from 'EHLO' to 'MAIL_FROM'
+INFO 	2022-02-04T21:51:23	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:51:23	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:23	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-04T21:51:23	Server reply status check 1 at msg stage 2
+INFO 	2022-02-04T21:51:23	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-04T21:51:23	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[0],w[4])
+INFO 	2022-02-04T21:51:23	Pollout MSG to locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:23	RCP is: RCPT TO: <test3@locafef.ru>
+.
+INFO 	2022-02-04T21:51:23	msg is 28/10/RCPT TO: <test3@locafef.ru>
+
+INFO 	2022-02-04T21:51:23	[SEND] Send 28 bytes of msg: RCPT TO: <test3@locafef.ru>
+
+INFO 	2022-02-04T21:51:23	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-04T21:51:23	[MSG Context] set stage from 'MAIL_FROM' to 'RCPT_TO'
+INFO 	2022-02-04T21:51:23	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:51:23	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:23	From server: 503 Bad sequence of commands
+
+INFO 	2022-02-04T21:51:23	Server reply status check 0 at msg stage 3
+ERROR 	2022-02-04T21:51:23	Set msg ./dir/wrk/mail6.eml to block.
+INFO 	2022-02-04T21:51:23	Send QUIT.
+INFO 	2022-02-04T21:51:23	[SEND] Send 6 bytes of msg: QUIT
+
+INFO 	2022-02-04T21:51:23	Destroy message 5
+INFO 	2022-02-04T21:51:26	one cycle is 3005.849000 ms
+INFO 	2022-02-04T21:51:26	filename is ./dir/wrk/mail6.eml
+INFO 	2022-02-04T21:51:26	[READ]1 line from file: 23/10 From: <ivan@gmail.com>
+
+INFO 	2022-02-04T21:51:26	[READ]2 line from file: 23/10 From: <ivan@gmail.com>
+
+INFO 	2022-02-04T21:51:26	[READ]1 line from file: 23/10 To: <test3@locafef.ru>
+
+INFO 	2022-02-04T21:51:26	[READ]2 line from file: 23/10 To: <test3@locafef.ru>
+
+ERROR 	2022-02-04T21:51:28	no ip found. Lets use localhost
+INFO 	2022-02-04T21:51:28	[CONNECTION]ADDR: 127.0.0.1:1026
+
+INFO 	2022-02-04T21:51:28	[CONNECTION]SET EVENTS - POLLIN: 1
+
+INFO 	2022-02-04T21:51:28	[MX] locafef.ru:127.0.0.1 active
+INFO 	2022-02-04T21:51:28	1 MX found
+INFO 	2022-02-04T21:51:28	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:51:28	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:28	From server: 220 Service ready
+
+INFO 	2022-02-04T21:51:28	Server reply status check 1 at msg stage 0
+INFO 	2022-02-04T21:51:28	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-04T21:51:28	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[0],w[4])
+INFO 	2022-02-04T21:51:28	Pollout MSG to locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:28	address is 127.0.0.1
+INFO 	2022-02-04T21:51:28	[SEND] Send 16 bytes of msg: EHLO localhost
+
+INFO 	2022-02-04T21:51:28	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-04T21:51:28	[MSG Context] set stage from 'NONE' to 'EHLO'
+INFO 	2022-02-04T21:51:28	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:51:28	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:28	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-04T21:51:28	Server reply status check 1 at msg stage 1
+INFO 	2022-02-04T21:51:28	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-04T21:51:28	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[0],w[4])
+INFO 	2022-02-04T21:51:28	Pollout MSG to locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:28	msg is 28/10/MAIL FROM: <ivan@gmail.com>
+
+INFO 	2022-02-04T21:51:28	[SEND] Send 28 bytes of msg: MAIL FROM: <ivan@gmail.com>
+
+INFO 	2022-02-04T21:51:28	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-04T21:51:28	[MSG Context] set stage from 'EHLO' to 'MAIL_FROM'
+INFO 	2022-02-04T21:51:28	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:51:28	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:28	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-04T21:51:28	Server reply status check 1 at msg stage 2
+INFO 	2022-02-04T21:51:28	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-04T21:51:28	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[0],w[4])
+INFO 	2022-02-04T21:51:28	Pollout MSG to locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:28	RCP is: RCPT TO: <test3@locafef.ru>
+.
+INFO 	2022-02-04T21:51:28	msg is 28/10/RCPT TO: <test3@locafef.ru>
+
+INFO 	2022-02-04T21:51:28	[SEND] Send 28 bytes of msg: RCPT TO: <test3@locafef.ru>
+
+INFO 	2022-02-04T21:51:28	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-04T21:51:28	[MSG Context] set stage from 'MAIL_FROM' to 'RCPT_TO'
+INFO 	2022-02-04T21:51:28	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:51:28	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:51:28	From server: 503 Bad sequence of commands
+
+INFO 	2022-02-04T21:51:28	Server reply status check 0 at msg stage 3
+ERROR 	2022-02-04T21:51:28	Set msg ./dir/wrk/mail6.eml to block.
+INFO 	2022-02-04T21:51:28	Send QUIT.
+INFO 	2022-02-04T21:51:28	[SEND] Send 6 bytes of msg: QUIT
+
+INFO 	2022-02-04T21:51:28	Destroy message 5
+INFO 	2022-02-04T21:51:31	one cycle is 4730.943000 ms
+INFO 	2022-02-04T21:51:31	No MX found
+INFO 	2022-02-04T21:51:31	one cycle is 0.049000 ms
+INFO 	2022-02-04T21:51:36	No MX found
+INFO 	2022-02-04T21:51:36	one cycle is 0.035000 ms
+INFO 	2022-02-04T21:51:41	No MX found
+INFO 	2022-02-04T21:51:41	one cycle is 0.038000 ms
+INFO 	2022-02-04T21:51:46	No MX found
+INFO 	2022-02-04T21:51:46	one cycle is 0.036000 ms
+INFO 	2022-02-04T21:51:51	No MX found
+INFO 	2022-02-04T21:51:51	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:51:56	No MX found
+INFO 	2022-02-04T21:51:56	one cycle is 0.038000 ms
+INFO 	2022-02-04T21:52:01	No MX found
+INFO 	2022-02-04T21:52:01	one cycle is 0.047000 ms
+INFO 	2022-02-04T21:52:06	No MX found
+INFO 	2022-02-04T21:52:06	one cycle is 0.057000 ms
+INFO 	2022-02-04T21:52:11	No MX found
+INFO 	2022-02-04T21:52:11	one cycle is 0.054000 ms
+INFO 	2022-02-04T21:52:16	No MX found
+INFO 	2022-02-04T21:52:16	one cycle is 0.044000 ms
+INFO 	2022-02-04T21:52:21	No MX found
+INFO 	2022-02-04T21:52:21	one cycle is 0.182000 ms
+INFO 	2022-02-04T21:52:26	No MX found
+INFO 	2022-02-04T21:52:26	one cycle is 0.033000 ms
+INFO 	2022-02-04T21:52:31	No MX found
+INFO 	2022-02-04T21:52:31	one cycle is 0.052000 ms
+INFO 	2022-02-04T21:52:36	No MX found
+INFO 	2022-02-04T21:52:36	one cycle is 0.065000 ms
+INFO 	2022-02-04T21:52:41	No MX found
+INFO 	2022-02-04T21:52:41	one cycle is 0.053000 ms
+INFO 	2022-02-04T21:52:46	No MX found
+INFO 	2022-02-04T21:52:46	one cycle is 0.033000 ms
+INFO 	2022-02-04T21:52:51	No MX found
+INFO 	2022-02-04T21:52:51	one cycle is 0.094000 ms
+INFO 	2022-02-04T21:52:56	No MX found
+INFO 	2022-02-04T21:52:56	one cycle is 0.050000 ms
+INFO 	2022-02-04T21:53:01	No MX found
+INFO 	2022-02-04T21:53:01	one cycle is 0.045000 ms
+INFO 	2022-02-04T21:53:06	No MX found
+INFO 	2022-02-04T21:53:06	one cycle is 0.042000 ms
+INFO 	2022-02-04T21:53:11	No MX found
+INFO 	2022-02-04T21:53:11	one cycle is 0.039000 ms
+INFO 	2022-02-04T21:53:16	No MX found
+INFO 	2022-02-04T21:53:16	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:53:21	No MX found
+INFO 	2022-02-04T21:53:21	one cycle is 0.035000 ms
+INFO 	2022-02-04T21:53:26	No MX found
+INFO 	2022-02-04T21:53:26	one cycle is 0.035000 ms
+INFO 	2022-02-04T21:53:31	No MX found
+INFO 	2022-02-04T21:53:31	one cycle is 0.038000 ms
+INFO 	2022-02-04T21:53:36	No MX found
+INFO 	2022-02-04T21:53:36	one cycle is 0.034000 ms
+INFO 	2022-02-04T21:53:41	No MX found
+INFO 	2022-02-04T21:53:41	one cycle is 0.036000 ms
+INFO 	2022-02-04T21:53:46	No MX found
+INFO 	2022-02-04T21:53:46	one cycle is 0.034000 ms
+INFO 	2022-02-04T21:53:51	No MX found
+INFO 	2022-02-04T21:53:51	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:53:56	No MX found
+INFO 	2022-02-04T21:53:56	one cycle is 0.049000 ms
+INFO 	2022-02-04T21:54:01	No MX found
+INFO 	2022-02-04T21:54:01	one cycle is 0.038000 ms
+INFO 	2022-02-04T21:54:06	No MX found
+INFO 	2022-02-04T21:54:06	one cycle is 0.033000 ms
+INFO 	2022-02-04T21:54:11	No MX found
+INFO 	2022-02-04T21:54:11	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:54:16	No MX found
+INFO 	2022-02-04T21:54:16	one cycle is 0.036000 ms
+INFO 	2022-02-04T21:54:21	No MX found
+INFO 	2022-02-04T21:54:21	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:54:26	No MX found
+INFO 	2022-02-04T21:54:26	one cycle is 0.043000 ms
+INFO 	2022-02-04T21:54:31	No MX found
+INFO 	2022-02-04T21:54:31	one cycle is 0.036000 ms
+INFO 	2022-02-04T21:54:36	No MX found
+INFO 	2022-02-04T21:54:36	one cycle is 0.059000 ms
+INFO 	2022-02-04T21:54:41	filename is ./dir/wrk/mail6.eml
+INFO 	2022-02-04T21:54:41	[READ]1 line from file: 23/10 From: <ivan@gmail.com>
+
+INFO 	2022-02-04T21:54:41	[READ]2 line from file: 23/10 From: <ivan@gmail.com>
+
+INFO 	2022-02-04T21:54:41	[READ]1 line from file: 23/10 To: <test3@locafef.ru>
+
+INFO 	2022-02-04T21:54:41	[READ]2 line from file: 23/10 To: <test3@locafef.ru>
+
+ERROR 	2022-02-04T21:54:47	no ip found. Lets use localhost
+INFO 	2022-02-04T21:54:47	[CONNECTION]ADDR: 127.0.0.1:1026
+
+INFO 	2022-02-04T21:54:47	[CONNECTION]SET EVENTS - POLLIN: 1
+
+INFO 	2022-02-04T21:54:47	[MX] locafef.ru:127.0.0.1 active
+INFO 	2022-02-04T21:54:47	1 MX found
+INFO 	2022-02-04T21:54:47	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:54:47	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:54:47	From server: 220 Service ready
+
+INFO 	2022-02-04T21:54:47	Server reply status check 1 at msg stage 0
+INFO 	2022-02-04T21:54:47	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-04T21:54:47	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[0],w[4])
+INFO 	2022-02-04T21:54:47	Pollout MSG to locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:54:47	address is 127.0.0.1
+INFO 	2022-02-04T21:54:47	[SEND] Send 16 bytes of msg: EHLO localhost
+
+INFO 	2022-02-04T21:54:47	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-04T21:54:47	[MSG Context] set stage from 'NONE' to 'EHLO'
+INFO 	2022-02-04T21:54:47	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:54:47	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:54:47	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-04T21:54:47	Server reply status check 1 at msg stage 1
+INFO 	2022-02-04T21:54:47	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-04T21:54:47	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[0],w[4])
+INFO 	2022-02-04T21:54:47	Pollout MSG to locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:54:47	msg is 28/10/MAIL FROM: <ivan@gmail.com>
+
+INFO 	2022-02-04T21:54:47	[SEND] Send 28 bytes of msg: MAIL FROM: <ivan@gmail.com>
+
+INFO 	2022-02-04T21:54:47	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-04T21:54:47	[MSG Context] set stage from 'EHLO' to 'MAIL_FROM'
+INFO 	2022-02-04T21:54:47	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:54:47	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:54:47	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-04T21:54:47	Server reply status check 1 at msg stage 2
+INFO 	2022-02-04T21:54:47	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-04T21:54:47	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[0],w[4])
+INFO 	2022-02-04T21:54:47	Pollout MSG to locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:54:47	RCP is: RCPT TO: <test3@locafef.ru>
+.
+INFO 	2022-02-04T21:54:47	msg is 28/10/RCPT TO: <test3@locafef.ru>
+
+INFO 	2022-02-04T21:54:47	[SEND] Send 28 bytes of msg: RCPT TO: <test3@locafef.ru>
+
+INFO 	2022-02-04T21:54:47	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-04T21:54:47	[MSG Context] set stage from 'MAIL_FROM' to 'RCPT_TO'
+INFO 	2022-02-04T21:54:47	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:54:47	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:54:47	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-04T21:54:47	Server reply status check 1 at msg stage 3
+INFO 	2022-02-04T21:54:47	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-04T21:54:47	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[0],w[4])
+INFO 	2022-02-04T21:54:47	Pollout MSG to locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:54:47	msg is 6/10/DATA
+
+INFO 	2022-02-04T21:54:47	[SEND] Send 6 bytes of msg: DATA
+
+INFO 	2022-02-04T21:54:47	[MSG Context] set stage from 'RCPT_TO' to 'MSG'
+INFO 	2022-02-04T21:54:47	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[0],w[4])
+INFO 	2022-02-04T21:54:47	Pollout MSG to locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:54:47	[READ] block from file: 
+Hi there
+and hi here!:) testsss . Hey ffff.
+. and hi here!:) testsss
+INFO 	2022-02-04T21:54:47	File read 0/46/46/69 
+Hi there
+and hi here!:) testsss . Hey ffff.
+. and hi here!:) testsss
+INFO 	2022-02-04T21:54:47	msg is 71/10/
+Hi there
+and hi here!:) testsss . Hey ffff.
+. and hi here!:) testsss
+
+INFO 	2022-02-04T21:54:47	[SEND] Send 71 bytes of msg: 
+Hi there
+and hi here!:) testsss . Hey ffff.
+. and hi here!:) testsss
+
+INFO 	2022-02-04T21:54:47	[MSG Context] set offset from '46' to '115'
+INFO 	2022-02-04T21:54:47	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[0],w[4])
+INFO 	2022-02-04T21:54:47	Pollout MSG to locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:54:47	[READ] block from file: 
+INFO 	2022-02-04T21:54:47	File read 0/46/115/0 
+INFO 	2022-02-04T21:54:47	File has already been read
+INFO 	2022-02-04T21:54:47	msg is 5/10/
+.
+
+INFO 	2022-02-04T21:54:47	[SEND] Send 5 bytes of msg: 
+.
+
+INFO 	2022-02-04T21:54:47	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-04T21:54:47	[MSG Context] set stage from 'MSG' to 'MSG_END'
+INFO 	2022-02-04T21:54:47	[MX] locafef.ru:127.0.0.1 has 1 messages, (r[1],w[0])
+INFO 	2022-02-04T21:54:47	Pollin MSG from locafef.ru:127.0.0.1.
+INFO 	2022-02-04T21:54:47	From server: 354 Start mail input; end with <CRLF>.<CRLF>
+
+INFO 	2022-02-04T21:54:47	Server reply status check 0 at msg stage 6
+ERROR 	2022-02-04T21:54:47	Set msg ./dir/wrk/mail6.eml to block.
+INFO 	2022-02-04T21:54:47	Send QUIT.
+INFO 	2022-02-04T21:54:47	[SEND] Send 6 bytes of msg: QUIT
+
+INFO 	2022-02-04T21:54:47	Destroy message 5
+INFO 	2022-02-04T21:54:50	one cycle is 8697.554000 ms
+INFO 	2022-02-04T21:54:50	No MX found
+INFO 	2022-02-04T21:54:50	one cycle is 0.049000 ms
+INFO 	2022-02-04T21:54:55	No MX found
+INFO 	2022-02-04T21:54:55	one cycle is 0.089000 ms
+INFO 	2022-02-04T21:55:00	No MX found
+INFO 	2022-02-04T21:55:00	one cycle is 0.036000 ms
+INFO 	2022-02-04T21:55:05	No MX found
+INFO 	2022-02-04T21:55:05	one cycle is 0.068000 ms
+INFO 	2022-02-04T21:55:10	No MX found
+INFO 	2022-02-04T21:55:10	one cycle is 0.053000 ms
+INFO 	2022-02-04T21:55:15	No MX found
+INFO 	2022-02-04T21:55:15	one cycle is 0.035000 ms
+INFO 	2022-02-04T21:55:20	No MX found
+INFO 	2022-02-04T21:55:20	one cycle is 0.038000 ms
+INFO 	2022-02-04T21:55:25	No MX found
+INFO 	2022-02-04T21:55:25	one cycle is 0.046000 ms
+INFO 	2022-02-04T21:55:30	No MX found
+INFO 	2022-02-04T21:55:30	one cycle is 0.096000 ms
+INFO 	2022-02-04T21:55:35	No MX found
+INFO 	2022-02-04T21:55:35	one cycle is 0.077000 ms
+INFO 	2022-02-04T21:55:40	No MX found
+INFO 	2022-02-04T21:55:40	one cycle is 0.057000 ms
+INFO 	2022-02-04T21:55:45	No MX found
+INFO 	2022-02-04T21:55:45	one cycle is 0.079000 ms
+INFO 	2022-02-04T21:55:50	No MX found
+INFO 	2022-02-04T21:55:50	one cycle is 0.042000 ms
+INFO 	2022-02-04T21:55:55	No MX found
+INFO 	2022-02-04T21:55:55	one cycle is 0.074000 ms
+INFO 	2022-02-04T21:56:00	No MX found
+INFO 	2022-02-04T21:56:00	one cycle is 0.032000 ms
+INFO 	2022-02-04T21:56:05	No MX found
+INFO 	2022-02-04T21:56:05	one cycle is 0.038000 ms
+INFO 	2022-02-04T21:56:10	No MX found
+INFO 	2022-02-04T21:56:10	one cycle is 0.060000 ms
+INFO 	2022-02-04T21:56:15	No MX found
+INFO 	2022-02-04T21:56:15	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:56:20	No MX found
+INFO 	2022-02-04T21:56:20	one cycle is 0.059000 ms
+INFO 	2022-02-04T21:56:25	No MX found
+INFO 	2022-02-04T21:56:25	one cycle is 0.058000 ms
+INFO 	2022-02-04T21:56:30	No MX found
+INFO 	2022-02-04T21:56:30	one cycle is 0.038000 ms
+INFO 	2022-02-04T21:56:35	No MX found
+INFO 	2022-02-04T21:56:35	one cycle is 0.038000 ms
+INFO 	2022-02-04T21:56:40	No MX found
+INFO 	2022-02-04T21:56:40	one cycle is 0.061000 ms
+INFO 	2022-02-04T21:56:45	No MX found
+INFO 	2022-02-04T21:56:45	one cycle is 0.038000 ms
+INFO 	2022-02-04T21:56:50	No MX found
+INFO 	2022-02-04T21:56:50	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:56:55	No MX found
+INFO 	2022-02-04T21:56:55	one cycle is 0.034000 ms
+INFO 	2022-02-04T21:57:00	No MX found
+INFO 	2022-02-04T21:57:00	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:57:05	No MX found
+INFO 	2022-02-04T21:57:05	one cycle is 0.031000 ms
+INFO 	2022-02-04T21:57:10	No MX found
+INFO 	2022-02-04T21:57:10	one cycle is 0.045000 ms
+INFO 	2022-02-04T21:57:15	No MX found
+INFO 	2022-02-04T21:57:15	one cycle is 0.032000 ms
+INFO 	2022-02-04T21:57:20	No MX found
+INFO 	2022-02-04T21:57:20	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:57:25	No MX found
+INFO 	2022-02-04T21:57:25	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:57:30	No MX found
+INFO 	2022-02-04T21:57:30	one cycle is 0.035000 ms
+INFO 	2022-02-04T21:57:35	No MX found
+INFO 	2022-02-04T21:57:35	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:57:40	No MX found
+INFO 	2022-02-04T21:57:40	one cycle is 0.069000 ms
+INFO 	2022-02-04T21:57:45	No MX found
+INFO 	2022-02-04T21:57:45	one cycle is 0.057000 ms
+INFO 	2022-02-04T21:57:50	No MX found
+INFO 	2022-02-04T21:57:50	one cycle is 0.059000 ms
+INFO 	2022-02-04T21:57:55	No MX found
+INFO 	2022-02-04T21:57:55	one cycle is 0.058000 ms
+INFO 	2022-02-04T21:58:00	No MX found
+INFO 	2022-02-04T21:58:00	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:58:05	No MX found
+INFO 	2022-02-04T21:58:05	one cycle is 0.037000 ms
+INFO 	2022-02-04T21:58:10	No MX found
+INFO 	2022-02-04T21:58:10	one cycle is 0.055000 ms
+INFO 	2022-02-04T21:58:15	No MX found
+INFO 	2022-02-04T21:58:15	one cycle is 0.057000 ms
+INFO 	2022-02-04T21:58:15	DONE: 1
+INFO 	2022-02-04T21:58:15	new path - ./dir/wrk
+INFO 	2022-02-04T21:58:15	DONE DONE: 1
