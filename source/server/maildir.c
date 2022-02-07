@@ -20,7 +20,12 @@ void save_mail_to_dir( mail* mail, const char* maildir )
         char* path_to_file_in_new = get_path_to_mail_file( path_to_user_maildir, "new", mail_filename );
 
         FILE* mail_fd = fopen( path_to_file_in_tmp, "a" );
-        fprintf( mail_fd, "From: <%s>\r\n", mail->sender );
+        if (mail->sender) {
+            fprintf( mail_fd, "From: <%s>\r\n", mail->sender );
+        } else {
+            fprintf( mail_fd, "From: <>\r\n");
+        }
+        
         fprintf( mail_fd, "To: <%s>\r\n\r\n", mail->recepients[ i ] );
         fprintf( mail_fd, "%s", mail->data );
         fclose( mail_fd );
@@ -55,8 +60,6 @@ char* make_maildir_for_user( char* path_to_root_dir, char* user_address )
     path_to_subdir = make_subdir_if_not_exists( path_to_user_maildir, "tmp" );
     free( path_to_subdir );
     path_to_subdir = make_subdir_if_not_exists( path_to_user_maildir, "new" );
-    free( path_to_subdir );
-    path_to_subdir = make_subdir_if_not_exists( path_to_user_maildir, "cur" );
     free( path_to_subdir );
 
     return path_to_user_maildir;

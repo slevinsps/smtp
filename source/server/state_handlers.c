@@ -23,18 +23,12 @@ int response_to_client(int client_fd )
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Sending message to client with fd %d...", client_fd );
     client_info* client = smtp_server.clients[ client_fd ];
 
-    ssize_t actual_sent = send( client_fd, client->buffer_output, strlen( client->buffer_output ), 0 );
-
-    if ( actual_sent < 0 && ( errno == EWOULDBLOCK || errno == EAGAIN ) ) {
+    ssize_t actual_sent = send( client_fd, client->buffer_output, strlen( client->buffer_output ), MSG_NOSIGNAL );
+    if ( actual_sent < 0 && ( errno == EPIPE || errno == EAGAIN ) ) {
         client->sent_output_flag = 0;
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_ERROR, "Error while sending message (EWOULDBLOCK or EAGAIN), continue.." );
-        return 1; // TODO: add handling this return code!
-    } else if ( actual_sent < 0 && ( errno == EWOULDBLOCK || errno == EAGAIN ) ) {
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_ERROR, "Client socket send() error." );
-        handle_error( "Client socket send() error." );
-    }
-
-    // TODO: check actual_sent and delete data that was sent from output buffer
+        log_info( &smtp_server.logger, LOG_MSG_TYPE_ERROR, "Error while sending message EAGAIN or EPIPE, continue.." );
+        return 1; 
+    } 
 
     client->sent_output_flag = 1;
     memset( client->buffer_output, 0, BUFFER_SIZE );
@@ -113,6 +107,10 @@ int HANDLE_CMND_HELO( int client_fd, const char* matchdata, te_smtp_server_state
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is not verified!", client_fd );
     }
 
+    if (host_reverse) {
+        free(host_reverse);
+    }
+
     add_data_to_buffer( client_fd, RE_RESP_OK );
     response_to_client( client_fd );
 
@@ -139,6 +137,10 @@ int HANDLE_CMND_EHLO( int client_fd, const char* matchdata, te_smtp_server_state
     } else {
         // it doesn't matter
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is not verified!\r", client_fd );
+    }
+
+    if (host_reverse) {
+        free(host_reverse);
     }
 
     // TODO: to add supported smtp commands to response?
@@ -233,25 +235,6 @@ int HANDLE_MAIL_DATA( int client_fd, const char* matchdata,  te_smtp_server_stat
 
     add_data_to_mail( client->mail, client->buffer_input, strlen( client->buffer_input ) );
 
-    // TODO: check if two dots - delete one? (rfc 821)
-
-    // if ( matchdatalen == 2 ) {
-    //     char* mail_data = ( *matchdata )[ matchdatalen - 2 ];
-
-    //     if ( *( matchdatasizes[ matchdatalen - 2] ) == 0 ) {
-    //         add_data_to_mail( client->mail, client->buffer_input, strlen( client->buffer_input ) );
-    //     } else {
-    //         add_data_to_mail( client->mail, mail_data, *( matchdatasizes[ matchdatalen - 2] ) );
-    //     }
-
-    //     char* mail_end = ( *matchdata )[ matchdatalen - 1 ];
-    //     if ( strlen( mail_end ) > 0 ) {
-    //         nextState = smtp_server_step( client->smtp_state,
-    //                 SMTP_SERVER_EV_MAIL_END, client_fd, matchdata, matchdatalen, matchdatasizes );
-    //     }
-    // } else {
-    //     add_data_to_mail( client->mail, client->buffer_input, strlen( client->buffer_input ) );
-    // }
 
     return nextState;
 }
@@ -265,6 +248,7 @@ int HANDLE_MAIL_END( int client_fd, te_smtp_server_state nextState )
     response_to_client( client_fd );
     save_mail_to_dir( client->mail, smtp_server.maildir);
 
+    reset_client_info( client_fd );
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling end of mail data finished." );
     return nextState;
 }

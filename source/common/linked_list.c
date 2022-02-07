@@ -40,7 +40,6 @@ node* linked_list_delete_node( node *head, int data_to_delete )
 {
     // Store head node 
     node* temp = head, *prev; 
-    prev = malloc(sizeof(node));
   
     // If head node itself holds the key to be deleted 
     if (temp != NULL && temp->data == data_to_delete) { 
@@ -49,7 +48,7 @@ node* linked_list_delete_node( node *head, int data_to_delete )
         printf( "Head node is deleted.\n" );
         return head; 
     } 
-  
+
     // Search for the key to be deleted, keep track of the 
     // previous node as we need to change 'prev->next' 
     while (temp != NULL && temp->data != data_to_delete) { 
@@ -69,7 +68,7 @@ node* linked_list_delete_node( node *head, int data_to_delete )
     }
     
   
-    free(temp);  // Free memory 
+    free(temp); 
     printf( "Node is deleted.\n" );
 
     return head;

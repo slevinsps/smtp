@@ -21,7 +21,7 @@
 
 extern struct server smtp_server;
 
-int initialize_server( int port, const char* logdir, const char* maildir )
+int initialize_server( int port, const char* maildir, logger_t *logger_listener )
 {
     printf( "Initializing server..." );
     smtp_server.server_socket_fd = create_socket( port );
@@ -32,8 +32,8 @@ int initialize_server( int port, const char* logdir, const char* maildir )
     smtp_server.read_fds  = ( fd_set* ) malloc( sizeof ( fd_set ) );
     smtp_server.write_fds = ( fd_set* ) malloc( sizeof ( fd_set ) );
     smtp_server.exceptions_fds = ( fd_set* ) malloc( sizeof ( fd_set ) );
-    smtp_server.logger.dir = logdir;
     smtp_server.maildir = maildir;
+    smtp_server.logger = *logger_listener;
 
     int res = make_dir((char*)smtp_server.maildir);
     if ( res < 0 ) {
@@ -42,9 +42,7 @@ int initialize_server( int port, const char* logdir, const char* maildir )
     if ( initialize_reg() == 0 ) {
         handle_error( "ERROR in initialize regular expressions for parser!" );
     }
-    if ( initialize_logger( &smtp_server.logger ) < 0 ) {
-        handle_error( "ERROR in initialize logger!" );
-    }
+    
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Server initialized." );
     return 0;   
 }
@@ -134,7 +132,6 @@ int run_server()
 
             break;
         }
-
     }
 
     close_server();
@@ -167,7 +164,7 @@ int handle_client_read(int client_fd)
     ssize_t received = recv( client_fd, buffer, BUFFER_SIZE, 0 );
 
     if ( received < 0 ) {
-        handle_error( "ERROR can not read data from client!" );
+        smtp_server_step( client->smtp_state, SMTP_SERVER_EV_CONN_LOST, client_fd, NULL);
     } else if ( received == 0 ) {
         smtp_server_step( client->smtp_state, SMTP_SERVER_EV_CONN_LOST, client_fd, NULL);
     } else {
@@ -222,5 +219,19 @@ void close_server()
     close( smtp_server.server_socket_fd );
     finalize_reg();
     logger_destroy( &smtp_server.logger );
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Server is closed." );
+
+    node* client = smtp_server.client_sockets_fds;
+    node* next_client;
+    while ( client != NULL ) {
+        next_client = client->next;
+        free_client_info(client->data);
+        free( client );
+        client = next_client;
+    }
+
+    free(smtp_server.read_fds);
+    free(smtp_server.write_fds);
+    free(smtp_server.exceptions_fds);
+    free(smtp_server.clients);
+
 }

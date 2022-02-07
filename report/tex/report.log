@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.2)  4 FEB 2022 01:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.2)  7 FEB 2022 19:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -756,11 +756,11 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./report.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 3.
+(Font)              <12> on input line 4.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 3.
+(Font)              <8> on input line 4.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 3.
+(Font)              <6> on input line 4.
 )
 \tf@toc=\write5
 \openout5 = `report.toc'.
@@ -776,549 +776,87 @@ l.16 \chapter
 
 ]
 {\cyrillictext \CYRG \cyrl \cyra \cyrv \cyra } 1.
+<../images/er.png, id=113, 434.37282pt x 368.1253pt>
+File: ../images/er.png Graphic file (type png)
+<use ../images/er.png>
+Package pdftex.def Info: ../images/er.png  used on input line 62.
+(pdftex.def)             Requested size: 483.69684pt x 409.94957pt.
 
-Underfull \hbox (badness 1552) in paragraph at lines 63--70
+Underfull \hbox (badness 1552) in paragraph at lines 59--66
 []\T2A/cmr/m/n/12 Зависимость меж-ду сущ-но-стя-ми пред-мет-ной об-ла-сти мо-же
 т быть опи-са-на ER-
  []
 
 [3
 
-] [4]
+] [4 <../images/er.png (PNG copy)>] [5]
 {\cyrillictext \CYRG \cyrl \cyra \cyrv \cyra } 2.
-
-LaTeX Warning: Reference `fig:server_fsm' on page 5 undefined on input line 105
-.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.110 \textit{serverfsm_report.def}
-                                    Р±РµР· РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РІ \te...
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Extra }, or forgotten $.
-<recently read> \egroup 
-                        
-l.110 \textit{serverfsm_report.def}
-                                    Р±РµР· РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РІ \te...
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-
-LaTeX Warning: Command \cyrb invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyre invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrz invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyri invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrs invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrp invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyro invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrl invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrsftsn invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrz invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyro invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrv invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyra invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrn invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyri invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrya invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrv invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrp invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyra invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrr invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyra invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrm invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyre invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrt invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrr invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyro invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrv invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrv invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrp invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyre invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrr invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyre invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrh invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyro invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrd invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyra invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrh invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyra invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrv invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrt invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyro invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrm invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyra invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyrt invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \cyra invalid in math mode on input line 110.
-
-
-LaTeX Warning: Command \CYRP invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyro invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrs invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrt invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrr invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyro invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyre invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrn invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrn invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrery invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrishrt invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrt invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyra invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrk invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyri invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrm invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyro invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrb invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrr invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyra invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrz invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyro invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrm invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrg invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrr invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyra invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrf invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrs invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyro invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrs invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrt invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyro invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrya invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrn invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyri invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrishrt invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrp invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrr invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyre invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrd invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrs invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrt invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyra invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrv invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrl invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyre invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrn invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrn invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyra invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrr invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyri invalid in math mode on input line 111.
-
-
-LaTeX Warning: Command \cyrs invalid in math mode on input line 111.
-
-
-LaTeX Warning: Reference `fig:server_fsm_report' on page 5 undefined on input l
-ine 111.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.112 
-      
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-Missing character: There is no б in font cmr12!
-Missing character: There is no е in font cmr12!
-Missing character: There is no з in font cmr12!
-Missing character: There is no и in font cmr12!
-Missing character: There is no с in font cmr12!
-Missing character: There is no п in font cmr12!
-Missing character: There is no о in font cmr12!
-Missing character: There is no л in font cmr12!
-Missing character: There is no ь in font cmr12!
-Missing character: There is no з in font cmr12!
-Missing character: There is no о in font cmr12!
-Missing character: There is no в in font cmr12!
-Missing character: There is no а in font cmr12!
-Missing character: There is no н in font cmr12!
-Missing character: There is no и in font cmr12!
-Missing character: There is no я in font cmr12!
-Missing character: There is no в in font cmr12!
-Missing character: There is no п in font cmr12!
-Missing character: There is no а in font cmr12!
-Missing character: There is no р in font cmr12!
-Missing character: There is no а in font cmr12!
-Missing character: There is no м in font cmr12!
-Missing character: There is no е in font cmr12!
-Missing character: There is no т in font cmr12!
-Missing character: There is no р in font cmr12!
-Missing character: There is no о in font cmr12!
-Missing character: There is no в in font cmr12!
-Missing character: There is no в in font cmr12!
-Missing character: There is no п in font cmr12!
-Missing character: There is no е in font cmr12!
-Missing character: There is no р in font cmr12!
-Missing character: There is no е in font cmr12!
-Missing character: There is no х in font cmr12!
-Missing character: There is no о in font cmr12!
-Missing character: There is no д in font cmr12!
-Missing character: There is no а in font cmr12!
-Missing character: There is no х in font cmr12!
-Missing character: There is no а in font cmr12!
-Missing character: There is no в in font cmr12!
-Missing character: There is no т in font cmr12!
-Missing character: There is no о in font cmr12!
-Missing character: There is no м in font cmr12!
-Missing character: There is no а in font cmr12!
-Missing character: There is no т in font cmr12!
-Missing character: There is no а in font cmr12!
-Missing character: There is no П in font cmr12!
-Missing character: There is no о in font cmr12!
-Missing character: There is no с in font cmr12!
-Missing character: There is no т in font cmr12!
-Missing character: There is no р in font cmr12!
-Missing character: There is no о in font cmr12!
-Missing character: There is no е in font cmr12!
-Missing character: There is no н in font cmr12!
-Missing character: There is no н in font cmr12!
-Missing character: There is no ы in font cmr12!
-Missing character: There is no й in font cmr12!
-Missing character: There is no т in font cmr12!
-Missing character: There is no а in font cmr12!
-Missing character: There is no к in font cmr12!
-Missing character: There is no и in font cmr12!
-Missing character: There is no м in font cmr12!
-Missing character: There is no о in font cmr12!
-Missing character: There is no б in font cmr12!
-Missing character: There is no р in font cmr12!
-Missing character: There is no а in font cmr12!
-Missing character: There is no з in font cmr12!
-Missing character: There is no о in font cmr12!
-Missing character: There is no м in font cmr12!
-Missing character: There is no г in font cmr12!
-Missing character: There is no р in font cmr12!
-Missing character: There is no а in font cmr12!
-Missing character: There is no ф in font cmr12!
-Missing character: There is no с in font cmr12!
-Missing character: There is no о in font cmr12!
-Missing character: There is no с in font cmr12!
-Missing character: There is no т in font cmr12!
-Missing character: There is no о in font cmr12!
-Missing character: There is no я in font cmr12!
-Missing character: There is no н in font cmr12!
-Missing character: There is no и in font cmr12!
-Missing character: There is no й in font cmr12!
-Missing character: There is no п in font cmr12!
-Missing character: There is no р in font cmr12!
-Missing character: There is no е in font cmr12!
-Missing character: There is no д in font cmr12!
-Missing character: There is no с in font cmr12!
-Missing character: There is no т in font cmr12!
-Missing character: There is no а in font cmr12!
-Missing character: There is no в in font cmr12!
-Missing character: There is no л in font cmr12!
-Missing character: There is no е in font cmr12!
-Missing character: There is no н in font cmr12!
-Missing character: There is no н in font cmr12!
-Missing character: There is no а in font cmr12!
-Missing character: There is no р in font cmr12!
-Missing character: There is no и in font cmr12!
-Missing character: There is no с in font cmr12!
-<../images/serverfsm.png, id=128, 696.6025pt x 978.65625pt>
+<../images/serverfsm.png, id=135, 1215.54124pt x 414.54875pt>
 File: ../images/serverfsm.png Graphic file (type png)
 <use ../images/serverfsm.png>
-Package pdftex.def Info: ../images/serverfsm.png  used on input line 115.
-(pdftex.def)             Requested size: 483.69684pt x 679.5444pt.
+Package pdftex.def Info: ../images/serverfsm.png  used on input line 105.
+(pdftex.def)             Requested size: 483.69684pt x 164.95628pt.
+[6
 
-LaTeX Warning: Float too large for page by 38.01103pt on input line 118.
-
-<../images/serverfsm_report.png, id=130, 1458.44875pt x 345.29pt>
-File: ../images/serverfsm_report.png Graphic file (type png)
-<use ../images/serverfsm_report.png>
-Package pdftex.def Info: ../images/serverfsm_report.png  used on input line 122
-.
-(pdftex.def)             Requested size: 483.69684pt x 114.51506pt.
-(./regexp/re_crlf.tex
+ <../images/serverfsm.png>] (./regexp/re_cmnd_noop.tex
 LaTeX Font Info:    Trying to load font information for T2A+cmtt on input line 
 1.
 
 (/usr/share/texlive/texmf-dist/tex/latex/cyrillic/t2acmtt.fd
 File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 ))
-(./regexp/re_space.tex) (./regexp/re_domain.tex)
-(./regexp/re_email_or_empty.tex) (./regexp/re_email.tex)
-(./regexp/re_cmnd_noop.tex) (./regexp/re_cmnd_helo.tex)
-(./regexp/re_cmnd_ehlo.tex) (./regexp/re_cmnd_mail.tex)
-(./regexp/re_cmnd_rcpt.tex) (./regexp/re_cmnd_vrfy.tex)
-(./regexp/re_cmnd_data.tex) (./regexp/re_cmnd_rset.tex)
-(./regexp/re_cmnd_quit.tex) [5
-
-] [6 <../images/serverfsm.png>]
-(./regexp/re_mail_data.tex) (./regexp/re_mail_end.tex)
-<../images/uml_server_ph.png, id=148, 628.3475pt x 472.76625pt>
+(./regexp/re_cmnd_helo.tex) (./regexp/re_cmnd_ehlo.tex)
+(./regexp/re_cmnd_mail.tex) (./regexp/re_cmnd_rcpt.tex)
+(./regexp/re_cmnd_vrfy.tex) (./regexp/re_cmnd_data.tex)
+(./regexp/re_cmnd_rset.tex) (./regexp/re_cmnd_quit.tex)
+(./regexp/re_mail_end.tex)
+<../images/uml_server_ph.png, id=147, 628.3475pt x 472.76625pt>
 File: ../images/uml_server_ph.png Graphic file (type png)
 <use ../images/uml_server_ph.png>
-Package pdftex.def Info: ../images/uml_server_ph.png  used on input line 181.
+Package pdftex.def Info: ../images/uml_server_ph.png  used on input line 146.
 (pdftex.def)             Requested size: 483.69684pt x 363.93015pt.
-<../images/uml_server_log.png, id=149, 452.69125pt x 191.71625pt>
+<../images/uml_server_log.png, id=148, 452.69125pt x 191.71625pt>
 File: ../images/uml_server_log.png Graphic file (type png)
 <use ../images/uml_server_log.png>
-Package pdftex.def Info: ../images/uml_server_log.png  used on input line 188.
+Package pdftex.def Info: ../images/uml_server_log.png  used on input line 153.
 (pdftex.def)             Requested size: 483.69684pt x 204.84767pt.
-
-! Undefined control sequence.
-l.197 \lstset
-             {language=C}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.198 \lstinputlisting
-                      {../../source/server/autogen/serveropts.def}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-[7 <../images/serverfsm_report.png>] [8 <../images/uml_server_ph.png> <../image
-s/uml_server_log.png>]
+ [7] [8 <../images/uml_server_ph.png> <../images/uml_server_log.png>]
 {\cyrillictext \CYRG \cyrl \cyra \cyrv \cyra } 3.
 [9
 
 ] [10
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 265.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 265.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 230.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 230.
  (./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 265.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 265.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 230.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 230.
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: D0B2BCD10AF4B114623EDD4DD77C0011;3553.
-
-
-LaTeX Warning: There were undefined references.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 265.
- )
-(\end occurred inside a group at level 1)
-
-### simple group (level 1) entered at line 110 ({)
-### bottom level 
+(rerunfilecheck)             Checksum: B2BF8B8AAACA5C13F31C8106F4B51261;3928.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 230.
+ ) 
 Here is how much of TeX's memory you used:
- 24209 strings out of 482616
- 469684 string characters out of 5956823
- 700977 words of memory out of 5000000
- 38699 multiletter control sequences out of 15000+600000
- 546018 words of font info for 50 fonts, out of 8000000 for 9000
+ 24175 strings out of 482616
+ 468994 string characters out of 5956823
+ 700787 words of memory out of 5000000
+ 38686 multiletter control sequences out of 15000+600000
+ 544471 words of font info for 47 fonts, out of 8000000 for 9000
  452 hyphenation exceptions out of 8191
- 63i,6n,78p,1190b,675s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/l
-abi1200.600pk> </home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/lat
-t1200.600pk> </home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/lait1
-200.600pk> </home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/lati120
-0.600pk> </home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1440.
-600pk> </home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1728.60
-0pk> </home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1200.600p
-k> </home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1200.600pk>
- </home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx2488.600pk> <
-/home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1440.600pk> </h
-ome/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm2074.600pk></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb>
-Output written on report.pdf (11 pages, 475090 bytes).
+ 63i,7n,78p,948b,675s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/latt1200.600pk>
+ </home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/lati1200.600pk> <
+/home/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1440.600pk> </h
+ome/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1728.600pk> </hom
+e/ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1200.600pk> </home/
+ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1200.600pk> </home/iv
+an/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx2488.600pk> </home/ivan
+/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1440.600pk> </home/ivan/.
+texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm2074.600pk>
+Output written on report.pdf (11 pages, 255530 bytes).
 PDF statistics:
- 677 PDF objects out of 1000 (max. 8388607)
- 211 compressed objects within 3 object streams
+ 578 PDF objects out of 1000 (max. 8388607)
+ 198 compressed objects within 2 object streams
  49 named destinations out of 1000 (max. 500000)
  161 words of extra memory for PDF output out of 10000 (max. 10000000)
 

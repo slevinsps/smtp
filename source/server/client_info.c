@@ -9,7 +9,9 @@ extern struct server smtp_server;
 
 void reset_client_info( int client_fd ) {
     client_info* client = smtp_server.clients[ client_fd ];
-    free_mail( client->mail );
+    if (client->mail) {
+        free_mail( client->mail );
+    }
     client->mail = NULL;
 }
 

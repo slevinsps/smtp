@@ -8,6 +8,7 @@
 
 #include <stdlib.h>  // rand(), srand()
 #include <time.h>    // time()
+#include <errno.h>
 
 #include "logger.h"
 #include "error_fail.h"
@@ -17,9 +18,9 @@
 #include "serveropts.h"
 
 
-
 int initialize_logger( logger_t* logger_sender )
 {
+    logger_sender->file = NULL;
     printf( "Logger: fork and init.\n" );
     pid_t pid;
     switch ( pid = fork() ) {
@@ -28,7 +29,7 @@ int initialize_logger( logger_t* logger_sender )
             return 0;
         case 0:  // logger
             printf("logger process forked with pid: %d\n", getpid());
-            printf("parent pid: %d\n", getppid());
+            signal(SIGINT, SIG_IGN);
 
             logger_t logger_listener;
 
@@ -38,7 +39,7 @@ int initialize_logger( logger_t* logger_sender )
             logger_run_loop( &logger_listener );
             logger_destroy( &logger_listener );
 
-            kill( getpid(), SIGTERM );
+            exit(0);
 
         default: // server
             logger_init_mq( logger_sender );
@@ -68,9 +69,12 @@ void logger_destroy( logger_t* logger )
     // close log file
     if ( logger->file ) {
         fclose( logger->file );
+        printf( "Logger file close.\n" );
+    } else {
+        msgctl( logger->msg_queue_id, IPC_RMID, NULL);
+        printf("LOG_MSG_EXIT send\n");
     }
-    // destroy the message queue
-    msgctl( logger->msg_queue_id, IPC_RMID, NULL);
+
     printf( "Logger finalized.\n" );
 }
 
@@ -84,12 +88,9 @@ void logger_run_loop( logger_t* logger )
 
     /* Logger in loop until exit message will be received */
     while(1) {
-
         // msgrcv to receive message
-        msgrcv( logger->msg_queue_id, &log_msg, log_msg_sz, 1, 0);
-
-        // break loop if received LOG_MSG_EXIT
-        if ( strcmp( log_msg.msg_text, LOG_MSG_EXIT ) == 0 ) {
+        int res = msgrcv( logger->msg_queue_id, &log_msg, log_msg_sz, 1, 0);
+        if (res < 0 && errno == EIDRM) {
             printf( "Logger: log msg is exit cmnd.\n" );
             break;
         }
@@ -98,6 +99,7 @@ void logger_run_loop( logger_t* logger )
         printf( "%s \n", log_msg.msg_text );
         fprintf( logger->file, "%s\r\n", log_msg.msg_text );
         fflush(logger->file);
+
     }
 
     printf( "Running logger loop finished.\n" );
@@ -113,19 +115,19 @@ char* logger_get_log_time()
 
 char* logger_get_log_type( log_msg_type_t type )
 {
-    char* result = malloc( sizeof( char ) * 5 );
+    char* result = calloc( sizeof( char ) * 5, sizeof(char));
     switch ( type ) {
         case LOG_MSG_TYPE_DEBUG:
-            result = "DEBUG";
+            sprintf(result, "%s", "DEBUG");
             break;
         case LOG_MSG_TYPE_INFO:
-            result = "INFO";
+            sprintf(result, "%s", "INFO");
             break;
         case LOG_MSG_TYPE_ERROR:
-            result = "ERROR";
+            sprintf(result, "%s", "ERROR");
             break;
         default:
-            result = "UNDEF";
+            sprintf(result, "%s", "UNDEF");
             break;
     }
     return result;
@@ -143,14 +145,18 @@ int logger_open_file( logger_t* logger )
     }
 
     printf( "Opening log file...\n");
-    logger->filename = malloc( sizeof( char ) * 100 );
-    sprintf( logger->filename, "%s/SMTP_LOG_%s", logger->dir, logger_get_log_time() );
-    printf( "Logger: filename is %s\n", logger->filename );
-    FILE* log_fd = fopen( logger->filename, "a" );
+    char* filename = calloc(100, sizeof( char ));
+    char* timestring = logger_get_log_time();
+    sprintf( filename, "%s/SMTP_LOG_%s", logger->dir, timestring);
+    free(timestring);
+    printf( "Logger: filename is %s\n", filename );
+    FILE* log_fd = fopen( filename, "a" );
     if ( log_fd == NULL ) {
         handle_error( "Logger: can't open file!" );
     }
     logger->file = log_fd;
+
+    free(filename);
     printf( "Opening log file finished.\n");
     return 0;
 }
@@ -174,12 +180,19 @@ int log_info( logger_t* logger, log_msg_type_t msg_type, const char *format, ...
     }
     va_end(args);
 
+    for (int i = 0; i < LOGGER_MSG_CAPACITY; i++) {
+        log_msg.msg_text[i] = 0;
+    }
+
     if(string) {
-        sprintf( log_msg.msg_text, "%s\t%s\t%s", timestring, typestring, string );
+        snprintf( log_msg.msg_text, LOGGER_MSG_CAPACITY, "%s\t%s\t%s", timestring, typestring, string );
         free(string);
     } else {
-        sprintf( log_msg.msg_text, "%s", "Error while logging a message: Memory allocation failed.\n");
+        snprintf( log_msg.msg_text, LOGGER_MSG_CAPACITY, "%s", "Error while logging a message: Memory allocation failed.\n");
     }
+
+    free(typestring);
+    free(timestring);
 
     /* Send log message to logger_listener */
     if ( ( msgsnd( logger->msg_queue_id, &log_msg, log_msg_sz, IPC_NOWAIT ) ) < 0 ) {

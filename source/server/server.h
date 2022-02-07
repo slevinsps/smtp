@@ -8,7 +8,7 @@
 #include "client_info.h"
 #include "logger.h"
 
-int initialize_server( int port, const char* logdir, const char* maildir );
+int initialize_server( int port, const char* maildir, logger_t *logger_listener );
 void server_update_fds();
 int run_server();
 void handle_new_connect();

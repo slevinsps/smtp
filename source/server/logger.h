@@ -35,7 +35,6 @@ typedef struct {
     log_msg_level_t log_level;
     /* log file */
     const char *dir;
-    char* filename;
     FILE* file;
     /* Sys Msg Queue data for log messages */
     key_t msg_queue_key;

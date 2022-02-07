@@ -42,16 +42,13 @@ tex_subdirs:
 # GENERATE SMTP FSM IMAGES
 
 # .def -> _def.dot
-./dot/serverfsm_def.dot: ./../source/server/autogen/server.def
-	$(FSM2DOT) $< > $@
-
-./dot/serverfsm_report_def.dot: ./../source/server/autogen/server_report.def
-	$(FSM2DOT) $< > $@
+serverfsm_def: ./../source/server/autogen/server.def
+	$(FSM2DOT) $< > $(DOT_DIR)/serverfsm_def.dot
 
 .PHONY: generate_fsm_images
-generate_fsm_images:
+generate_fsm_images: serverfsm_def serverfsm_report_def 
 	 dot -Tpng $(DOT_DIR)/serverfsm_def.dot > $(IMG_DIR)/serverfsm.png; \
-	 dot -Tpng $(DOT_DIR)/serverfsm_report_def.dot > $(IMG_DIR)/serverfsm_report.png
+
 
 
 # TEX FILES GENERATION:
