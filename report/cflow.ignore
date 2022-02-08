@@ -1,0 +1,7 @@
+printf
+free
+realloc
+malloc
+calloc
+memcpy
+strlen

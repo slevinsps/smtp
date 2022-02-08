@@ -1,0 +1,269 @@
+INFO 	2022-02-07T19:04:50	SMTP client is successfully launched.
+INFO 	2022-02-07T19:04:50	No MX found
+INFO 	2022-02-07T19:04:50	one cycle is 0.050000 ms
+INFO 	2022-02-07T19:04:55	No MX found
+INFO 	2022-02-07T19:04:55	one cycle is 0.034000 ms
+INFO 	2022-02-07T19:05:00	No MX found
+INFO 	2022-02-07T19:05:00	one cycle is 0.033000 ms
+INFO 	2022-02-07T19:05:05	No MX found
+INFO 	2022-02-07T19:05:05	one cycle is 0.032000 ms
+INFO 	2022-02-07T19:05:10	No MX found
+INFO 	2022-02-07T19:05:10	one cycle is 0.028000 ms
+INFO 	2022-02-07T19:05:15	No MX found
+INFO 	2022-02-07T19:05:15	one cycle is 0.034000 ms
+INFO 	2022-02-07T19:05:20	No MX found
+INFO 	2022-02-07T19:05:20	one cycle is 0.029000 ms
+INFO 	2022-02-07T19:05:25	No MX found
+INFO 	2022-02-07T19:05:25	one cycle is 0.024000 ms
+INFO 	2022-02-07T19:05:30	No MX found
+INFO 	2022-02-07T19:05:30	one cycle is 0.027000 ms
+INFO 	2022-02-07T19:05:35	No MX found
+INFO 	2022-02-07T19:05:35	one cycle is 0.023000 ms
+INFO 	2022-02-07T19:05:40	No MX found
+INFO 	2022-02-07T19:05:40	one cycle is 0.031000 ms
+INFO 	2022-02-07T19:05:45	No MX found
+INFO 	2022-02-07T19:05:45	one cycle is 0.030000 ms
+INFO 	2022-02-07T19:05:50	No MX found
+INFO 	2022-02-07T19:05:50	one cycle is 0.059000 ms
+INFO 	2022-02-07T19:05:55	filename is ./dir/wrk/mail6.eml
+ERROR 	2022-02-07T19:05:55	getaddrinfo: Name or service not known
+
+ERROR 	2022-02-07T19:05:55	NOT FOUND MX: 127.0.0.1
+INFO 	2022-02-07T19:05:55	[CONNECTION]ADDR: 127.0.0.1:1026
+
+INFO 	2022-02-07T19:05:55	[CONNECTION]SET EVENTS - POLLIN: 1
+
+INFO 	2022-02-07T19:05:55	filename is ./dir/wrk/mail8.eml
+INFO 	2022-02-07T19:05:55	filename is ./dir/wrk/mail7eml
+INFO 	2022-02-07T19:05:55	[MX] example.com:127.0.0.1 active
+INFO 	2022-02-07T19:05:55	1 MX found
+INFO 	2022-02-07T19:05:55	msg actual is ./dir/wrk/mail6.eml/0/1644249955
+INFO 	2022-02-07T19:05:56	From server: 220 Service ready
+
+INFO 	2022-02-07T19:05:56	Server reply status check 1 at msg stage 0
+INFO 	2022-02-07T19:05:56	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 0
+INFO 	2022-02-07T19:05:56	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:05:56	msg actual is ./dir/wrk/mail6.eml/0/1644249955
+INFO 	2022-02-07T19:05:56	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:05:56	[SEND] Send 16 bytes of msg: EHLO localhost
+
+INFO 	2022-02-07T19:05:56	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:05:56	[MSG Context] set stage from 'NONE' to 'EHLO'
+INFO 	2022-02-07T19:05:56	msg actual is ./dir/wrk/mail6.eml/1/1644249956
+INFO 	2022-02-07T19:05:56	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-07T19:05:56	Server reply status check 1 at msg stage 1
+INFO 	2022-02-07T19:05:56	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 1
+INFO 	2022-02-07T19:05:56	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:05:56	msg actual is ./dir/wrk/mail6.eml/1/1644249956
+INFO 	2022-02-07T19:05:56	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:05:56	[SEND] Send 32 bytes of msg: MAIL FROM: <test1@example.com>
+
+INFO 	2022-02-07T19:05:56	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:05:56	[MSG Context] set stage from 'EHLO' to 'MAIL_FROM'
+INFO 	2022-02-07T19:05:56	msg actual is ./dir/wrk/mail6.eml/2/1644249956
+INFO 	2022-02-07T19:05:57	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-07T19:05:57	Server reply status check 1 at msg stage 2
+INFO 	2022-02-07T19:05:57	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 2
+INFO 	2022-02-07T19:05:57	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:05:57	[MSG Context] set stage from 'MAIL_FROM' to 'RCPT_TO'
+INFO 	2022-02-07T19:05:57	msg actual is ./dir/wrk/mail6.eml/3/1644249956
+INFO 	2022-02-07T19:05:57	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:05:57	RCP is: RCPT TO: <test2@example.com>
+.
+INFO 	2022-02-07T19:05:57	[SEND] Send 30 bytes of msg: RCPT TO: <test2@example.com>
+
+INFO 	2022-02-07T19:05:57	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:05:57	msg actual is ./dir/wrk/mail6.eml/3/1644249957
+INFO 	2022-02-07T19:05:57	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-07T19:05:57	Server reply status check 1 at msg stage 3
+INFO 	2022-02-07T19:05:57	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 3
+INFO 	2022-02-07T19:05:57	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:05:57	msg actual is ./dir/wrk/mail6.eml/3/1644249957
+INFO 	2022-02-07T19:05:57	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:05:57	[SEND] Send 6 bytes of msg: DATA
+
+INFO 	2022-02-07T19:05:57	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:05:57	[MSG Context] set stage from 'RCPT_TO' to 'DATA'
+INFO 	2022-02-07T19:05:57	msg actual is ./dir/wrk/mail6.eml/4/1644249957
+INFO 	2022-02-07T19:05:58	From server: 354 Start mail input; end with <CRLF>.<CRLF>
+
+INFO 	2022-02-07T19:05:58	Server reply status check 1 at msg stage 4
+INFO 	2022-02-07T19:05:58	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 4
+INFO 	2022-02-07T19:05:58	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:05:58	[MSG Context] set stage from 'DATA' to 'MSG'
+INFO 	2022-02-07T19:05:58	msg actual is ./dir/wrk/mail6.eml/5/1644249957
+INFO 	2022-02-07T19:05:58	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:05:58	[READ] block from file: short
+INFO 	2022-02-07T19:05:58	File read 0/50/50/5 short
+INFO 	2022-02-07T19:05:58	[SEND] Send 7 bytes of msg: short
+
+INFO 	2022-02-07T19:05:58	[MSG Context] set offset from '50' to '55'
+INFO 	2022-02-07T19:05:58	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:05:58	[READ] block from file: 
+INFO 	2022-02-07T19:05:58	File read 0/50/55/0 
+INFO 	2022-02-07T19:05:58	File has already been read
+INFO 	2022-02-07T19:05:58	[SEND] Send 3 bytes of msg: .
+
+INFO 	2022-02-07T19:05:58	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:05:58	[MSG Context] set stage from 'MSG' to 'MSG_END'
+INFO 	2022-02-07T19:05:58	msg actual is ./dir/wrk/mail6.eml/6/1644249958
+INFO 	2022-02-07T19:05:58	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-07T19:05:58	Server reply status check 1 at msg stage 6
+INFO 	2022-02-07T19:05:58	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 6
+INFO 	2022-02-07T19:05:58	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:05:58	[MSG Context] set stage from 'MSG_END' to 'QUIT'
+INFO 	2022-02-07T19:05:58	msg removed was ./dir/wrk/mail6.eml
+INFO 	2022-02-07T19:05:58	Destroy message
+INFO 	2022-02-07T19:05:58	aaa mx_msg->mx_entry->pfd.revents 5/4
+INFO 	2022-02-07T19:05:58	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:05:58	[SEND] Send 32 bytes of msg: MAIL FROM: <test1@example.com>
+
+INFO 	2022-02-07T19:05:58	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:05:58	[MSG Context] set stage from 'EHLO' to 'MAIL_FROM'
+INFO 	2022-02-07T19:05:58	msg actual is ./dir/wrk/mail7eml/2/1644249958
+INFO 	2022-02-07T19:05:59	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-07T19:05:59	Server reply status check 1 at msg stage 2
+INFO 	2022-02-07T19:05:59	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 2
+INFO 	2022-02-07T19:05:59	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:05:59	[MSG Context] set stage from 'MAIL_FROM' to 'RCPT_TO'
+INFO 	2022-02-07T19:05:59	msg actual is ./dir/wrk/mail7eml/3/1644249958
+INFO 	2022-02-07T19:05:59	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:05:59	RCP is: RCPT TO: <test3@example.com>
+.
+INFO 	2022-02-07T19:05:59	[SEND] Send 30 bytes of msg: RCPT TO: <test3@example.com>
+
+INFO 	2022-02-07T19:05:59	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:05:59	msg actual is ./dir/wrk/mail7eml/3/1644249959
+INFO 	2022-02-07T19:05:59	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-07T19:05:59	Server reply status check 1 at msg stage 3
+INFO 	2022-02-07T19:05:59	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 3
+INFO 	2022-02-07T19:05:59	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:05:59	msg actual is ./dir/wrk/mail7eml/3/1644249959
+INFO 	2022-02-07T19:05:59	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:05:59	[SEND] Send 6 bytes of msg: DATA
+
+INFO 	2022-02-07T19:05:59	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:05:59	[MSG Context] set stage from 'RCPT_TO' to 'DATA'
+INFO 	2022-02-07T19:05:59	msg actual is ./dir/wrk/mail7eml/4/1644249959
+INFO 	2022-02-07T19:06:00	From server: 354 Start mail input; end with <CRLF>.<CRLF>
+
+INFO 	2022-02-07T19:06:00	Server reply status check 1 at msg stage 4
+INFO 	2022-02-07T19:06:00	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 4
+INFO 	2022-02-07T19:06:00	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:06:00	[MSG Context] set stage from 'DATA' to 'MSG'
+INFO 	2022-02-07T19:06:00	msg actual is ./dir/wrk/mail7eml/5/1644249959
+INFO 	2022-02-07T19:06:00	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:06:00	[READ] block from file: shortsdsd
+INFO 	2022-02-07T19:06:00	File read 0/50/50/9 shortsdsd
+INFO 	2022-02-07T19:06:00	[SEND] Send 11 bytes of msg: shortsdsd
+
+INFO 	2022-02-07T19:06:00	[MSG Context] set offset from '50' to '59'
+INFO 	2022-02-07T19:06:00	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:06:00	[READ] block from file: 
+INFO 	2022-02-07T19:06:00	File read 0/50/59/0 
+INFO 	2022-02-07T19:06:00	File has already been read
+INFO 	2022-02-07T19:06:00	[SEND] Send 3 bytes of msg: .
+
+INFO 	2022-02-07T19:06:00	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:06:00	[MSG Context] set stage from 'MSG' to 'MSG_END'
+INFO 	2022-02-07T19:06:00	msg actual is ./dir/wrk/mail7eml/6/1644249960
+INFO 	2022-02-07T19:06:01	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-07T19:06:01	Server reply status check 1 at msg stage 6
+INFO 	2022-02-07T19:06:01	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 6
+INFO 	2022-02-07T19:06:01	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:06:01	[MSG Context] set stage from 'MSG_END' to 'QUIT'
+INFO 	2022-02-07T19:06:01	msg removed was ./dir/wrk/mail7eml
+INFO 	2022-02-07T19:06:01	Destroy message
+INFO 	2022-02-07T19:06:01	aaa mx_msg->mx_entry->pfd.revents 5/4
+INFO 	2022-02-07T19:06:01	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:06:01	[SEND] Send 32 bytes of msg: MAIL FROM: <test1@example.com>
+
+INFO 	2022-02-07T19:06:01	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:06:01	[MSG Context] set stage from 'EHLO' to 'MAIL_FROM'
+INFO 	2022-02-07T19:06:01	msg actual is ./dir/wrk/mail8.eml/2/1644249961
+INFO 	2022-02-07T19:06:01	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-07T19:06:01	Server reply status check 1 at msg stage 2
+INFO 	2022-02-07T19:06:01	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 2
+INFO 	2022-02-07T19:06:01	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:06:01	[MSG Context] set stage from 'MAIL_FROM' to 'RCPT_TO'
+INFO 	2022-02-07T19:06:01	msg actual is ./dir/wrk/mail8.eml/3/1644249961
+INFO 	2022-02-07T19:06:01	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:06:01	RCP is: RCPT TO: <test4@example.com>
+.
+INFO 	2022-02-07T19:06:01	[SEND] Send 30 bytes of msg: RCPT TO: <test4@example.com>
+
+INFO 	2022-02-07T19:06:01	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:06:01	msg actual is ./dir/wrk/mail8.eml/3/1644249961
+INFO 	2022-02-07T19:06:02	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-07T19:06:02	Server reply status check 1 at msg stage 3
+INFO 	2022-02-07T19:06:02	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 3
+INFO 	2022-02-07T19:06:02	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:06:02	msg actual is ./dir/wrk/mail8.eml/3/1644249961
+INFO 	2022-02-07T19:06:02	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:06:02	[SEND] Send 6 bytes of msg: DATA
+
+INFO 	2022-02-07T19:06:02	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:06:02	[MSG Context] set stage from 'RCPT_TO' to 'DATA'
+INFO 	2022-02-07T19:06:02	msg actual is ./dir/wrk/mail8.eml/4/1644249962
+INFO 	2022-02-07T19:06:02	From server: 354 Start mail input; end with <CRLF>.<CRLF>
+
+INFO 	2022-02-07T19:06:02	Server reply status check 1 at msg stage 4
+INFO 	2022-02-07T19:06:02	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 4
+INFO 	2022-02-07T19:06:02	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:06:02	[MSG Context] set stage from 'DATA' to 'MSG'
+INFO 	2022-02-07T19:06:02	msg actual is ./dir/wrk/mail8.eml/5/1644249962
+INFO 	2022-02-07T19:06:02	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:06:02	[READ] block from file: shortssssssssssssssssss
+INFO 	2022-02-07T19:06:02	File read 0/50/50/23 shortssssssssssssssssss
+INFO 	2022-02-07T19:06:02	[SEND] Send 25 bytes of msg: shortssssssssssssssssss
+
+INFO 	2022-02-07T19:06:02	[MSG Context] set offset from '50' to '73'
+INFO 	2022-02-07T19:06:02	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:06:02	[READ] block from file: 
+INFO 	2022-02-07T19:06:02	File read 0/50/73/0 
+INFO 	2022-02-07T19:06:02	File has already been read
+INFO 	2022-02-07T19:06:02	[SEND] Send 3 bytes of msg: .
+
+INFO 	2022-02-07T19:06:02	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:06:02	[MSG Context] set stage from 'MSG' to 'MSG_END'
+INFO 	2022-02-07T19:06:02	msg actual is ./dir/wrk/mail8.eml/6/1644249962
+INFO 	2022-02-07T19:06:03	From server: 250 Requested mail action okay, completed
+
+INFO 	2022-02-07T19:06:03	Server reply status check 1 at msg stage 6
+INFO 	2022-02-07T19:06:03	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 6
+INFO 	2022-02-07T19:06:03	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:06:03	[MSG Context] set stage from 'MSG_END' to 'QUIT'
+INFO 	2022-02-07T19:06:03	msg actual is ./dir/wrk/mail8.eml/8/1644249962
+INFO 	2022-02-07T19:06:03	Pollout MSG to example.com:127.0.0.1.
+INFO 	2022-02-07T19:06:03	[SEND] Send 6 bytes of msg: QUIT
+
+INFO 	2022-02-07T19:06:03	[MSG Context] set events from 'WRITE' to 'README'
+INFO 	2022-02-07T19:06:03	msg actual is ./dir/wrk/mail8.eml/8/1644249963
+INFO 	2022-02-07T19:06:03	From server: 221 Service closing transmission channel
+
+INFO 	2022-02-07T19:06:03	Pollin MSG from example.com:127.0.0.1. Result: 0, stage 8
+INFO 	2022-02-07T19:06:03	[MSG Context] set events from 'README' to 'WRITE'
+INFO 	2022-02-07T19:06:03	[MSG Context] set stage from 'QUIT' to 'QUIT_CONFIRMED'
+INFO 	2022-02-07T19:06:03	msg removed was ./dir/wrk/mail8.eml
+INFO 	2022-02-07T19:06:03	Destroy message
+INFO 	2022-02-07T19:06:03	Destroy mx 5
+INFO 	2022-02-07T19:06:06	one cycle is 10836.115000 ms
+INFO 	2022-02-07T19:06:06	No MX found
+INFO 	2022-02-07T19:06:06	one cycle is 0.036000 ms
+INFO 	2022-02-07T19:06:11	No MX found
+INFO 	2022-02-07T19:06:11	one cycle is 0.031000 ms
+INFO 	2022-02-07T19:06:16	No MX found
+INFO 	2022-02-07T19:06:16	one cycle is 0.054000 ms
+INFO 	2022-02-07T19:06:21	No MX found
+INFO 	2022-02-07T19:06:21	one cycle is 0.038000 ms
+INFO 	2022-02-07T19:06:22	DONE: 1
+INFO 	2022-02-07T19:06:22	SMTP client is successfully finished.

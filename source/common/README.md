@@ -1,1 +1,0 @@
-# smtp common files
