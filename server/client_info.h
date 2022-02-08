@@ -9,6 +9,7 @@ struct client_description {
     te_smtp_server_state smtp_state;
     int socket_fd;
     int buffer_input_len;
+    int time;
     char* buffer_input;
     char* buffer_output;
     int sent_output_flag;

@@ -46,7 +46,7 @@ def test_one_connect(path_to_data = None, num_rcpt = 1, num_mails = 1, sender = 
             if check_command(s, 'mail from: ', '<>', OK_ANS) < 0: return -1 
 
         for i in range(num_rcpt):
-            if check_command(s, 'rcpt to: ', '<test{i}@mail.ru>', OK_ANS) < 0: return -1 
+            if check_command(s, 'rcpt to: ', f'<test{i}@mail.ru>', OK_ANS) < 0: return -1 
         if check_command(s, 'data', '', DATA_ANS) < 0: return -1 
         s.sendall(send_data)
         if check_command(s, '\r\n.', '', OK_ANS) < 0: return -1 
@@ -178,7 +178,7 @@ def test_on_quit_commands(host = 'localhost', port = 1026):
     return 0
 
 def tests():
-    mail_path = '../../mail'
+    mail_path = './mail'
     if os.path.exists(mail_path):
         files = glob.glob(mail_path + '/*')
         for f in files:

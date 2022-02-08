@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <errno.h>
+#include <time.h>    // time()
 
 #include "reg_exprs.h"
 #include "responses.h"
@@ -39,6 +40,9 @@ int response_to_client(int client_fd )
 
 int HANDLE_CMND_NOOP( int client_fd, te_smtp_server_state nextState ) {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command NOOP..." );
+    client_description* client = smtp_server.clients[ client_fd ];
+    client->time = time(NULL);
+    
     add_data_to_buffer( client_fd, RE_RESP_OK );
     response_to_client( client_fd );
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command NOOP finished." );
@@ -69,6 +73,7 @@ int HANDLE_ACCEPTED( int client_fd, te_smtp_server_state nextState )
     memset( client, 0, sizeof( client_description ) );
     client->buffer_input = NULL;
     client->buffer_input_len = 0;
+    client->time = time(NULL);
     client->smtp_state = SMTP_SERVER_ST_READY;
     client->mail = NULL;
 
@@ -88,6 +93,8 @@ int HANDLE_ACCEPTED( int client_fd, te_smtp_server_state nextState )
 int HANDLE_CMND_HELO( int client_fd, const char* matchdata, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command HELO..." );
+    client_description* client = smtp_server.clients[ client_fd ];
+    client->time = time(NULL);
 
     const char* host = matchdata;
 
@@ -118,7 +125,8 @@ int HANDLE_CMND_HELO( int client_fd, const char* matchdata, te_smtp_server_state
 int HANDLE_CMND_EHLO( int client_fd, const char* matchdata, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handle command EHLO." );
-
+    client_description* client = smtp_server.clients[ client_fd ];
+    client->time = time(NULL);
     const char* host = matchdata;
 
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Host: %s", host );
@@ -149,6 +157,7 @@ int HANDLE_CMND_MAIL( int client_fd, const char* matchdata, te_smtp_server_state
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command MAIL..." );
     client_description* client = smtp_server.clients[ client_fd ];
+    client->time = time(NULL);
 
     char* email_address = NULL;
     if ( matchdata && strlen(matchdata) > 0 ) {
@@ -176,7 +185,8 @@ int HANDLE_CMND_RCPT( int client_fd, const char* matchdata, te_smtp_server_state
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command RCPT..." );
     client_description* client = smtp_server.clients[ client_fd ];
-
+    client->time = time(NULL);
+    
     char* email_address = NULL;
     if ( matchdata && strlen(matchdata) > 0 ) {
         email_address = strdup(matchdata);;
@@ -209,6 +219,7 @@ int HANDLE_CMND_DATA( int client_fd, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command DATA..." );
     client_description* client = smtp_server.clients[ client_fd ];
+    client->time = time(NULL);
 
     // initializing a little buffer for mail data
     client->mail->data = malloc( sizeof( char ) );
@@ -237,6 +248,7 @@ int HANDLE_MAIL_END( int client_fd, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling end of mail data..." );
     client_description* client = smtp_server.clients[ client_fd ];
+    client->time = time(NULL);
 
     add_data_to_buffer( client_fd, RE_RESP_OK );
     response_to_client( client_fd );
@@ -249,6 +261,8 @@ int HANDLE_MAIL_END( int client_fd, te_smtp_server_state nextState )
 
 int HANDLE_CMND_VRFY( int client_fd, te_smtp_server_state nextState )
 {
+    client_description* client = smtp_server.clients[ client_fd ];
+    client->time = time(NULL);
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command VRFY..." );
 
     add_data_to_buffer( client_fd, RE_RESP_ERR_NOT_IMPL_CMND );
@@ -260,6 +274,8 @@ int HANDLE_CMND_VRFY( int client_fd, te_smtp_server_state nextState )
 
 int HANDLE_CMND_RSET( int client_fd, te_smtp_server_state nextState )
 {
+    client_description* client = smtp_server.clients[ client_fd ];
+    client->time = time(NULL);
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handle command RSET." );
     reset_client_info( client_fd );
     add_data_to_buffer( client_fd, RE_RESP_OK );

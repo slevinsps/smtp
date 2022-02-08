@@ -12,5 +12,6 @@
 #define RE_RESP_ERR_MAILBOX_UNAVAIL "550 Requested action not taken: mailbox unavailable\r\n"
 #define RE_RESP_ERR_MEM_ALLOC "552 Requested mail action aborted: exceeded storage allocation\r\n"
 #define RE_RESP_ERR_MAILBOX_INCORRECT "553 Requested action not taken: mailbox name not allowed\r\n"
+#define TIMEOUT 5 * 60
 
 #endif //SMTP_RESPONSES_H

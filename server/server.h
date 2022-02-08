@@ -25,7 +25,6 @@ typedef struct {
 
 struct server {
 	int server_socket_fd;
-	int break_loop;
 
 	client_description** clients;
 	int clients_size;

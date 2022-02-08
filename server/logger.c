@@ -15,7 +15,7 @@
 #include "help_funcs.h"
 #include "server.h"
 
-#include "serveropts.h"
+#include "autogen/serveropts.h"
 
 
 int initialize_logger( logger_t* logger_sender )

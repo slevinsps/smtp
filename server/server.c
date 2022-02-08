@@ -9,6 +9,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <errno.h>
+#include <time.h>    // time()
+#include "responses.h"
 
 #include "server.h"
 #include "network.h"
@@ -26,7 +28,6 @@ int initialize_server( int port, const char* maildir, logger_t *logger_listener 
 {
     printf( "Initializing server..." );
     smtp_server.server_socket_fd = create_socket( port );
-    smtp_server.break_loop = 0;
     smtp_server.clients = NULL;
     smtp_server.clients_size = 0;
     smtp_server.client_sockets_fds = NULL;
@@ -86,7 +87,7 @@ void server_update_fds()
 int run_server() 
 {
     /* Main server loop */
-    while ( !smtp_server.break_loop ) {
+    while (1) {
         server_update_fds();
 
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Waiting for pselect..." );
@@ -98,10 +99,7 @@ int run_server()
         switch ( res_pselect ) {
         case -1: 
             handle_error( "ERROR pselect returns -1." ); 
-            break;
-        case 0:
-            handle_error( "ERROR pselect returns 0." );
-            break;     
+            break;    
         default:
 
             /* Checking server socket. */
@@ -117,15 +115,22 @@ int run_server()
             node* current_client = smtp_server.client_sockets_fds;
             while ( current_client != NULL ) {
                 node* next_client = current_client->next;
-                if ( FD_ISSET( current_client->data, smtp_server.read_fds ) ) {
-                    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "handle client read");
-                    handle_client_read( current_client->data );
-                } else if ( FD_ISSET( current_client->data, smtp_server.write_fds ) ) {
-                    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "handle client write");
-                    handle_client_write( current_client->data );
-                } else if ( FD_ISSET( current_client->data, smtp_server.exceptions_fds ) ) {
-                    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Exception in client with fd %i.", current_client->data );
-                    close_client_connection( current_client->data );
+
+                client_description* client = smtp_server.clients[current_client->data];
+                int time_diff = time(NULL) - client->time;
+                if (time_diff > TIMEOUT) {
+                    smtp_server_step( client->smtp_state, SMTP_SERVER_EV_CONN_LOST, current_client->data, NULL);
+                } else {
+                    if ( FD_ISSET( current_client->data, smtp_server.read_fds ) ) {
+                        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "handle client read");
+                        handle_client_read( current_client->data );
+                    } else if ( FD_ISSET( current_client->data, smtp_server.write_fds ) ) {
+                        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "handle client write");
+                        handle_client_write( current_client->data );
+                    } else if ( FD_ISSET( current_client->data, smtp_server.exceptions_fds ) ) {
+                        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Exception in client with fd %i.", current_client->data );
+                        close_client_connection( current_client->data );
+                    }
                 }
                 current_client = next_client;
             }
