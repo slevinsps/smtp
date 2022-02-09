@@ -7,8 +7,7 @@
 
 extern struct server smtp_server;
 
-void reset_client_info( int client_fd ) {
-    client_description* client = smtp_server.clients[ client_fd ];
+void reset_client_info( client_struct* client ) {
     if (client->mail) {
         free_mail( client->mail );
     }
@@ -21,11 +20,41 @@ void reset_client_info( int client_fd ) {
     client->buffer_input_len = 0;
 }
 
-void free_client_info( int client_fd ) {
-    client_description* client = smtp_server.clients[ client_fd ];
+
+
+client_struct* linked_list_delete_client( client_struct *head, client_struct *delete_node )
+{
+    client_struct* temp = head;
+    client_struct* prev = NULL;
+  
+    if (temp != NULL && temp == delete_node) { 
+        head = temp->next;   // Change head 
+        return head; 
+    } 
+ 
+    while (temp != NULL && temp != delete_node) { 
+        prev = temp; 
+        temp = temp->next; 
+    } 
+  
+    if (temp == NULL) { 
+        return head;
+    } 
+  
+    if (prev) {
+        prev->next = temp->next; 
+    }
+  
+    return head;
+}
+
+void free_client_info( client_struct* client ) {
     if ( client == NULL ) {
         return;
     }
+
+    smtp_server.clients_list = linked_list_delete_client(smtp_server.clients_list, client);
+
     if ( client->buffer_input != NULL ) {
         free(client->buffer_input);
         client->buffer_input = NULL;
@@ -39,12 +68,11 @@ void free_client_info( int client_fd ) {
         client->mail = NULL;
     }
     free( client );
-    smtp_server.clients[ client_fd ] = NULL;
+    client = NULL;
 }
 
-int add_data_to_buffer( int client_fd, char* data )
+int add_data_to_buffer( client_struct* client, char* data )
 {
-    client_description* client = smtp_server.clients[ client_fd ];
     if ( client->buffer_output == NULL ) {
         client->buffer_output = malloc( BUFFER_SIZE );
         memset(client->buffer_output, 0, BUFFER_SIZE);
@@ -55,4 +83,31 @@ int add_data_to_buffer( int client_fd, char* data )
     sprintf( client->buffer_output + strlen( client->buffer_output ), "%s", data );
     client->sent_output_flag = 0;
     return 0;
+}
+
+
+client_struct* add_client( client_struct *head, client_struct *new_node )
+{
+    if( new_node == NULL ){
+        handle_error("Unable to allocate memory for new fd client_struct");
+        return NULL;
+    }
+
+    new_node->next = NULL;
+
+    // check for first insertion
+    if ( head == NULL ) {
+        head = new_node;
+    } else {
+        client_struct *current = head;
+        while ( 1 ) {
+            if( current->next == NULL ) {
+                current->next = new_node;
+                break;
+            }
+            current = current->next;
+        };
+    }
+
+    return head;
 }

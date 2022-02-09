@@ -4,7 +4,6 @@
 #include <sys/select.h>
 
 #include "network.h"
-#include "linked_list.h"
 #include "client_info.h"
 #include "logger.h"
 
@@ -12,9 +11,8 @@ int initialize_server( int port, const char* maildir, logger_t *logger_listener 
 void server_update_fds();
 int run_server();
 void handle_new_connect();
-int handle_client_read( int client_fd );
-int handle_client_write( int client_fd );
-void close_client_connection( int client_fd );
+int handle_client_read(client_struct* client);
+int handle_client_write(client_struct* client);
 void close_server();
 
 typedef struct {
@@ -26,9 +24,7 @@ typedef struct {
 struct server {
 	int server_socket_fd;
 
-	client_description** clients;
-	int clients_size;
-	node* client_sockets_fds;
+	client_struct* clients_list;
 
 	fd_set* read_fds;
 	fd_set* write_fds;

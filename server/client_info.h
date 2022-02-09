@@ -4,8 +4,8 @@
 #include "autogen/server-fsm.h"
 #include "mail.h"
 
-typedef struct client_description client_description;
-struct client_description {
+typedef struct client_struct client_struct;
+struct client_struct {
     te_smtp_server_state smtp_state;
     int socket_fd;
     int buffer_input_len;
@@ -14,10 +14,12 @@ struct client_description {
     char* buffer_output;
     int sent_output_flag;
     mail* mail;
+    client_struct* next;
 };
- 
-void reset_client_info( int client_fd );
-void free_client_info( int client_fd );
-int add_data_to_buffer( int client_fd, char* data );
+
+client_struct* add_client( client_struct *head, client_struct *new_node ); 
+void reset_client_info( client_struct* client );
+void free_client_info( client_struct* client );
+int add_data_to_buffer( client_struct* client, char* data );
 
 #endif //SMTP_MTA_CLIENT_INFO_H

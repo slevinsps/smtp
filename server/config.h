@@ -8,5 +8,3 @@
 #define LOGGER_DIR_DEFAULT "./logs"
 #define LOGGER_QUEUE_CAPACITY 1024
 #define LOGGER_MSG_CAPACITY 256
-#define LOGGER_STOP_MSG "exit"
-#define SERVER_DOMAIN_NAME "pai.ru"

@@ -16,15 +16,15 @@
 #include "network.h"
 #include "maildir.h"
 #include "logger.h"
+#include "client_info.h"
 
 extern struct server smtp_server;
 
-int response_to_client(int client_fd )
+int response_to_client(client_struct* client)
 {
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Sending message to client with fd %d...", client_fd );
-    client_description* client = smtp_server.clients[ client_fd ];
+    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Sending message to client with fd %d...", client->socket_fd );
 
-    ssize_t actual_sent = send( client_fd, client->buffer_output, strlen( client->buffer_output ), MSG_NOSIGNAL );
+    ssize_t actual_sent = send( client->socket_fd, client->buffer_output, strlen( client->buffer_output ), MSG_NOSIGNAL );
     if ( actual_sent < 0 && ( errno == EPIPE || errno == EAGAIN ) ) {
         client->sent_output_flag = 0;
         log_info( &smtp_server.logger, LOG_MSG_TYPE_ERROR, "Error while sending message EAGAIN or EPIPE, continue.." );
@@ -38,107 +38,79 @@ int response_to_client(int client_fd )
     return 0;
 }
 
-int HANDLE_CMND_NOOP( int client_fd, te_smtp_server_state nextState ) {
+int HANDLE_CMND_NOOP( client_struct* client, te_smtp_server_state nextState ) {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command NOOP..." );
-    client_description* client = smtp_server.clients[ client_fd ];
     client->time = time(NULL);
 
-    add_data_to_buffer( client_fd, RE_RESP_OK );
-    response_to_client( client_fd );
+    add_data_to_buffer( client, RE_RESP_OK );
+    response_to_client( client );
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command NOOP finished." );
     return nextState;
 }
 
-int HANDLE_ACCEPTED( int client_fd, te_smtp_server_state nextState )
+
+// smtp_server.client_sockets_fds = add_client( smtp_server.client_sockets_fds,
+//             client_socket_fd );
+int HANDLE_ACCEPTED( client_struct* client, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling accepted." );
 
-    if ( nonblocking_socket( client_fd ) ) {
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_ERROR,"ERROR! Fail to set flag 'O_NONBLOCK' for socket.");
-    } else {
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO,"Client's socket set as nonblocking.");
-    }
+    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "New client accepted." );
 
-    // realloc array of clients
-    if ( smtp_server.max_fd >= smtp_server.clients_size ) {
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Reallocing clients array." );
-        smtp_server.clients = realloc( smtp_server.clients,
-                ( smtp_server.max_fd / CLIENTS_REALLOC_STEP + 1) * CLIENTS_REALLOC_STEP
-                * sizeof( client_description* ) );
-        smtp_server.clients_size += CLIENTS_REALLOC_STEP;
-    }
+    smtp_server.clients_list = add_client(smtp_server.clients_list, client);
 
-    // initialize client_description struct for this client_fd
-    client_description* client = malloc( sizeof( client_description ) );
-    memset( client, 0, sizeof( client_description ) );
-    client->buffer_input = NULL;
-    client->buffer_input_len = 0;
-    client->time = time(NULL);
-    client->smtp_state = SMTP_SERVER_ST_READY;
-    client->mail = NULL;
+    add_data_to_buffer( client, RE_RESP_READY );
+    response_to_client( client );
 
-    // and add client to clients[]
-    smtp_server.clients[ client_fd ] = client;
-
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "%s", "New client accepted." );
-
-    add_data_to_buffer( client_fd, RE_RESP_READY );
-    response_to_client( client_fd );
-
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "New client current smtp state: %d", smtp_server.clients[ client_fd ]->smtp_state );
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling accepted finished." );
     return nextState;
 }
 
-int HANDLE_CMND_HELO( int client_fd, const char* matchdata, te_smtp_server_state nextState )
+int HANDLE_CMND_HELO( client_struct* client, const char* matchdata, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command HELO..." );
-    client_description* client = smtp_server.clients[ client_fd ];
     client->time = time(NULL);
 
     const char* host = matchdata;
 
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Host: %s", host );
 
-    
-
-    char* host_reverse = reverse_dns_lookup( client_fd );
+    char* host_reverse = reverse_dns_lookup( client->socket_fd );
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Peer address is: %s", host_reverse );
 
     if ( strcmp( host, host_reverse ) == 0 ) {
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is verified.", client_fd );
+        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is verified.", client );
     } else {
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is not verified!", client_fd );
+        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is not verified!", client );
     }
 
     if (host_reverse) {
         free(host_reverse);
     }
 
-    add_data_to_buffer( client_fd, RE_RESP_OK );
-    response_to_client( client_fd );
+    add_data_to_buffer( client, RE_RESP_OK );
+    response_to_client( client );
 
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command HELO finished." );
     return nextState;
 }
 
-int HANDLE_CMND_EHLO( int client_fd, const char* matchdata, te_smtp_server_state nextState )
+int HANDLE_CMND_EHLO( client_struct* client, const char* matchdata, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handle command EHLO." );
-    client_description* client = smtp_server.clients[ client_fd ];
     client->time = time(NULL);
     const char* host = matchdata;
 
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Host: %s", host );
 
-    char* host_reverse = reverse_dns_lookup( client_fd );
+    char* host_reverse = reverse_dns_lookup( client->socket_fd );
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Debug: Peer address is: %s", host_reverse );
 
     if ( strcmp( host, host_reverse ) == 0 ) {
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is verified.\r", client_fd );
+        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is verified.\r", client );
     } else {
         // it doesn't matter
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is not verified!\r", client_fd );
+        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is not verified!\r", client );
     }
 
     if (host_reverse) {
@@ -146,17 +118,16 @@ int HANDLE_CMND_EHLO( int client_fd, const char* matchdata, te_smtp_server_state
     }
 
     // TODO: to add supported smtp commands to response?
-    add_data_to_buffer( client_fd, RE_RESP_OK );
-    response_to_client( client_fd );
+    add_data_to_buffer( client, RE_RESP_OK );
+    response_to_client( client );
 
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command EHLO finished." );
     return nextState;
 }
 
-int HANDLE_CMND_MAIL( int client_fd, const char* matchdata, te_smtp_server_state nextState )
+int HANDLE_CMND_MAIL( client_struct* client, const char* matchdata, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command MAIL..." );
-    client_description* client = smtp_server.clients[ client_fd ];
     client->time = time(NULL);
 
     char* email_address = NULL;
@@ -174,17 +145,16 @@ int HANDLE_CMND_MAIL( int client_fd, const char* matchdata, te_smtp_server_state
     client->mail->recepients = NULL;
     client->mail->sender = email_address;
 
-    add_data_to_buffer( client_fd, RE_RESP_OK );
-    response_to_client( client_fd );
+    add_data_to_buffer( client, RE_RESP_OK );
+    response_to_client( client );
 
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command MAIL finished." );
     return nextState;
 }
 
-int HANDLE_CMND_RCPT( int client_fd, const char* matchdata, te_smtp_server_state nextState )
+int HANDLE_CMND_RCPT( client_struct* client, const char* matchdata, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command RCPT..." );
-    client_description* client = smtp_server.clients[ client_fd ];
     client->time = time(NULL);
     
     char* email_address = NULL;
@@ -197,7 +167,7 @@ int HANDLE_CMND_RCPT( int client_fd, const char* matchdata, te_smtp_server_state
 
     if ( client->mail->recepients_num + 1 > MAX_RCPT_CLIENTS ) {
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's mail already has max number of recepients! Can't add one more.\r" );
-        response_to_client( client_fd );
+        response_to_client( client );
     } else {
         if ( client->mail->recepients == NULL ) {
             // allocation if adding first recepient
@@ -207,98 +177,91 @@ int HANDLE_CMND_RCPT( int client_fd, const char* matchdata, te_smtp_server_state
         client->mail->recepients[ client->mail->recepients_num ] = email_address;
         client->mail->recepients_num++;
 
-        add_data_to_buffer( client_fd, RE_RESP_OK );
-        response_to_client( client_fd );
+        add_data_to_buffer( client, RE_RESP_OK );
+        response_to_client( client );
     }
 
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command RCPT finished." );
     return nextState;
 }
 
-int HANDLE_CMND_DATA( int client_fd, te_smtp_server_state nextState )
+int HANDLE_CMND_DATA( client_struct* client, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command DATA..." );
-    client_description* client = smtp_server.clients[ client_fd ];
     client->time = time(NULL);
 
     // initializing a little buffer for mail data
     client->mail->data = NULL;
     client->mail->data_capacity = 0;
 
-    add_data_to_buffer( client_fd, RE_RESP_START_MAIL );
-    response_to_client( client_fd );
+    add_data_to_buffer( client, RE_RESP_START_MAIL );
+    response_to_client( client );
 
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command DATA finished." );
     return nextState;
 }
 
-int HANDLE_MAIL_DATA( int client_fd, const char* matchdata,  te_smtp_server_state nextState )
+int HANDLE_MAIL_DATA( client_struct* client, const char* matchdata,  te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling mail data..." );
-    // client_description* client = smtp_server.clients[ client_fd ];
-
-    // add_data_to_mail( client->mail, client->buffer_input, strlen( client->buffer_input ) );
-
 
     return nextState;
 }
 
-int HANDLE_MAIL_END( int client_fd, te_smtp_server_state nextState )
+int HANDLE_MAIL_END( client_struct* client, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling end of mail data..." );
-    client_description* client = smtp_server.clients[ client_fd ];
     client->time = time(NULL);
 
-    add_data_to_buffer( client_fd, RE_RESP_OK );
-    response_to_client( client_fd );
+    add_data_to_buffer( client, RE_RESP_OK );
+    response_to_client( client );
     save_mail_to_dir( client->mail, smtp_server.maildir);
 
-    reset_client_info( client_fd );
+    reset_client_info( client );
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling end of mail data finished." );
     return nextState;
 }
 
-int HANDLE_CMND_VRFY( int client_fd, te_smtp_server_state nextState )
+int HANDLE_CMND_VRFY( client_struct* client, te_smtp_server_state nextState )
 {
-    client_description* client = smtp_server.clients[ client_fd ];
     client->time = time(NULL);
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command VRFY..." );
 
-    add_data_to_buffer( client_fd, RE_RESP_ERR_NOT_IMPL_CMND );
-    response_to_client( client_fd );
+    add_data_to_buffer( client, RE_RESP_ERR_NOT_IMPL_CMND );
+    response_to_client( client );
 
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command VRFY finished." );
     return nextState;
 }
 
-int HANDLE_CMND_RSET( int client_fd, te_smtp_server_state nextState )
+int HANDLE_CMND_RSET( client_struct* client, te_smtp_server_state nextState )
 {
-    client_description* client = smtp_server.clients[ client_fd ];
     client->time = time(NULL);
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handle command RSET." );
-    reset_client_info( client_fd );
-    add_data_to_buffer( client_fd, RE_RESP_OK );
-    response_to_client( client_fd );
+    reset_client_info( client );
+    add_data_to_buffer( client, RE_RESP_OK );
+    response_to_client( client );
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command RSET finished." );
     return nextState;
 }
 
-int HANDLE_CMND_CLOSE( int client_fd, te_smtp_server_state nextState )
+
+int HANDLE_CMND_CLOSE( client_struct* client, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling close..." );
-    add_data_to_buffer( client_fd, RE_RESP_CLOSE );
-    response_to_client( client_fd );
-    free_client_info( client_fd );
-    close_client_connection( client_fd );
+    add_data_to_buffer( client, RE_RESP_CLOSE );
+    response_to_client( client );
+    close( client->socket_fd );
+    free_client_info( client );
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling close finished." );
     return nextState;
 }
 
-int HANDLE_ERROR( int client_fd, te_smtp_server_state nextState )
+int HANDLE_ERROR( client_struct* client, te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling error..." );
-    add_data_to_buffer( client_fd, RE_RESP_ERR_BAD_SEQ );
-    response_to_client( client_fd );
+    add_data_to_buffer( client, RE_RESP_ERR_BAD_SEQ );
+    response_to_client( client );
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling error finished." );
     return nextState;
 }

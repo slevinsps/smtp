@@ -19,6 +19,7 @@
 #include "error_fail.h"
 #include "state_handlers.h"
 #include "help_funcs.h"
+#include "network.h"
 
 #include "autogen/server-fsm.h"
 
@@ -28,9 +29,7 @@ int initialize_server( int port, const char* maildir, logger_t *logger_listener 
 {
     printf( "Initializing server..." );
     smtp_server.server_socket_fd = create_socket( port );
-    smtp_server.clients = NULL;
-    smtp_server.clients_size = 0;
-    smtp_server.client_sockets_fds = NULL;
+    smtp_server.clients_list = NULL;
     smtp_server.read_fds  = ( fd_set* ) malloc( sizeof ( fd_set ) );
     smtp_server.write_fds = ( fd_set* ) malloc( sizeof ( fd_set ) );
     smtp_server.exceptions_fds = ( fd_set* ) malloc( sizeof ( fd_set ) );
@@ -60,13 +59,13 @@ void server_update_fds()
     smtp_server.max_fd = smtp_server.server_socket_fd;
 
     /* Adding clients sockets if exist */
-    node* current_client = smtp_server.client_sockets_fds;
+    client_struct* current_client = smtp_server.clients_list;
     while ( current_client != NULL ) {
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Adding client to fd set." );
-        FD_SET( current_client->data, smtp_server.read_fds );
+        FD_SET( current_client->socket_fd, smtp_server.read_fds );
         // FD_SET( current_client->data, smtp_server.write_fds );
-        if ( current_client->data > smtp_server.max_fd ) {
-            smtp_server.max_fd = current_client->data;
+        if ( current_client->socket_fd > smtp_server.max_fd ) {
+            smtp_server.max_fd = current_client->socket_fd;
         }
         current_client = current_client->next;
     }
@@ -106,24 +105,23 @@ int run_server()
             }
 
             /* Checking clients sockets. */
-            node* current_client = smtp_server.client_sockets_fds;
+            client_struct* current_client = smtp_server.clients_list;
             while ( current_client != NULL ) {
-                node* next_client = current_client->next;
+                client_struct* next_client = current_client->next;
 
-                client_description* client = smtp_server.clients[current_client->data];
-                int time_diff = time(NULL) - client->time;
+                int time_diff = time(NULL) - current_client->time;
                 if (time_diff > TIMEOUT) {
-                    smtp_server_step( client->smtp_state, SMTP_SERVER_EV_CONN_LOST, current_client->data, NULL);
+                    smtp_server_step( current_client->smtp_state, SMTP_SERVER_EV_CONN_LOST, current_client, NULL);
                 } else {
-                    if ( FD_ISSET( current_client->data, smtp_server.read_fds ) ) {
+                    if ( FD_ISSET( current_client->socket_fd, smtp_server.read_fds ) ) {
                         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "handle client read");
-                        handle_client_read( current_client->data );
-                    } else if ( FD_ISSET( current_client->data, smtp_server.write_fds ) ) {
+                        handle_client_read( current_client );
+                    } else if ( FD_ISSET( current_client->socket_fd, smtp_server.write_fds ) ) {
                         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "handle client write");
-                        handle_client_write( current_client->data );
-                    } else if ( FD_ISSET( current_client->data, smtp_server.exceptions_fds ) ) {
-                        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Exception in client with fd %i.", current_client->data );
-                        close_client_connection( current_client->data );
+                        handle_client_write( current_client );
+                    } else if ( FD_ISSET( current_client->socket_fd, smtp_server.exceptions_fds ) ) {
+                        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Exception in client with fd %i.", current_client->socket_fd );
+                        smtp_server_step( current_client->smtp_state, SMTP_SERVER_EV_CONN_LOST, current_client, NULL);
                     }
                 }
                 current_client = next_client;
@@ -144,16 +142,33 @@ void handle_new_connect()
     if ( client_socket_fd < 0 ) {
         handle_error( "ERROR can not accept client!" );
     }
+
+    if ( nonblocking_socket( client_socket_fd ) ) {
+        log_info( &smtp_server.logger, LOG_MSG_TYPE_ERROR,"ERROR! Fail to set flag 'O_NONBLOCK' for socket.");
+    } else {
+        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO,"Client's socket set as nonblocking.");
+    }
+
+    client_struct* client = malloc( sizeof( client_struct ) );
+    memset( client, 0, sizeof( client_struct ) );
+    client->buffer_input = NULL;
+    client->buffer_input_len = 0;
+    client->buffer_output = NULL;
+    client->time = time(NULL);
+    client->smtp_state = SMTP_SERVER_ST_READY;
+    client->mail = NULL;
+    client->next = NULL;
+    client->socket_fd = client_socket_fd;
+    
     smtp_server_step( SMTP_SERVER_ST_INIT, SMTP_SERVER_EV_CONN_ACCEPTED,
-                      client_socket_fd, NULL);
-    smtp_server.client_sockets_fds = linked_list_add_node( smtp_server.client_sockets_fds,
-            client_socket_fd );
+                      client, NULL);
+    
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client accepted and client socket added to clients array." );
 }
 
 
 
-int handle_command(client_description* client, int client_fd) {
+int handle_command(client_struct* client, te_smtp_server_state* next_state) {
     int msg_len = 0;
     char* end = strstr(client->buffer_input, EOM);
 
@@ -165,12 +180,12 @@ int handle_command(client_description* client, int client_fd) {
         re_commands cmnd = (re_commands) SMTP_SERVER_EV_INVALID;
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Reg find command %d with match data = %s", cmnd, "");
 
-        te_smtp_server_state next_state = smtp_server_step(client->smtp_state,
-                                    (te_smtp_server_event) cmnd, client_fd, "");
+        *next_state = smtp_server_step(client->smtp_state,
+                                    (te_smtp_server_event) cmnd, client, "");
         
-        if (next_state != SMTP_SERVER_ST_CLOSED && next_state != SMTP_SERVER_ST_INVALID) {
-            client->smtp_state = next_state;
-            log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "New current state for client %d is %d.", client_fd, client->smtp_state );
+        if (*next_state != SMTP_SERVER_ST_CLOSED && *next_state != SMTP_SERVER_ST_INVALID) {
+            client->smtp_state = *next_state;
+            log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "New current state for client %d is %d.", client->socket_fd, client->smtp_state );
         }
         
         return msg_len;
@@ -188,12 +203,12 @@ int handle_command(client_description* client, int client_fd) {
         re_commands cmnd = match_reg( client->buffer_input, &matchdata, message_len);
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Reg find command %d with match data = %s", cmnd, matchdata);
 
-        te_smtp_server_state next_state = smtp_server_step(client->smtp_state,
-                                    (te_smtp_server_event) cmnd, client_fd, matchdata);
+        *next_state = smtp_server_step(client->smtp_state,
+                                    (te_smtp_server_event) cmnd, client, matchdata);
         
-        if (next_state != SMTP_SERVER_ST_CLOSED && next_state != SMTP_SERVER_ST_INVALID) {
-            client->smtp_state = next_state;
-            log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "New current state for client %d is %d.", client_fd, client->smtp_state );
+        if (*next_state != SMTP_SERVER_ST_CLOSED && *next_state != SMTP_SERVER_ST_INVALID) {
+            client->smtp_state = *next_state;
+            log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "New current state for client %d is %d.", client->socket_fd, client->smtp_state );
         }
 
         free_match_data(matchdata);
@@ -202,7 +217,7 @@ int handle_command(client_description* client, int client_fd) {
     return message_len;
 }
 
-int handle_data(client_description* client, int client_fd) {
+int handle_data(client_struct* client) {
     int msg_len = 0;
     char* end = strstr(client->buffer_input, EOM);
 
@@ -215,11 +230,11 @@ int handle_data(client_description* client, int client_fd) {
 
         add_data_to_mail( client->mail, client->buffer_input, msg_len );
 
-        te_smtp_server_state next_state = smtp_server_step(client->smtp_state, SMTP_SERVER_EV_MAIL_END, client_fd, NULL);
+        te_smtp_server_state next_state = smtp_server_step(client->smtp_state, SMTP_SERVER_EV_MAIL_END, client, NULL);
         
         if (next_state != SMTP_SERVER_ST_CLOSED && next_state != SMTP_SERVER_ST_INVALID) {
             client->smtp_state = next_state;
-            log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "New current state for client %d is %d.", client_fd, client->smtp_state );
+            log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "New current state for client %d is %d.", client->socket_fd, client->smtp_state );
         }
 
     }
@@ -227,21 +242,19 @@ int handle_data(client_description* client, int client_fd) {
     return msg_len;
 }
 
-int handle_client_read(int client_fd)
+int handle_client_read(client_struct* client)
 {
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Reading message from client with fd %d...", client_fd );
-
-    client_description* client = smtp_server.clients[ client_fd ];
+    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Reading message from client with fd %d...", client->socket_fd );
 
     char buffer[BUFFER_SIZE];
     memset( buffer, 0, BUFFER_SIZE );
 
-    ssize_t received = recv( client_fd, buffer, BUFFER_SIZE, 0 );
+    ssize_t received = recv( client->socket_fd, buffer, BUFFER_SIZE, 0 );
 
     if ( received < 0 && errno != EAGAIN) {
-        smtp_server_step( client->smtp_state, SMTP_SERVER_EV_CONN_LOST, client_fd, NULL);
+        smtp_server_step( client->smtp_state, SMTP_SERVER_EV_CONN_LOST, client, NULL);
     } else if ( received == 0 ) {
-        smtp_server_step( client->smtp_state, SMTP_SERVER_EV_CONN_LOST, client_fd, NULL);
+        smtp_server_step( client->smtp_state, SMTP_SERVER_EV_CONN_LOST, client, NULL);
     } else {
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Message \"%s\" received from client.",
                buffer );
@@ -255,16 +268,17 @@ int handle_client_read(int client_fd)
         int message_len = 0;
 
         
-
+        te_smtp_server_state next_state = SMTP_SERVER_ST_READY;
         if (client->smtp_state == SMTP_SERVER_ST_DATA) {
-            message_len = handle_data(client, client_fd);
+            message_len = handle_data(client);
         } else {
-            message_len = handle_command(client, client_fd);
+            message_len = handle_command(client, &next_state);
         }
 
-        // printf("client->buffer_input = %s  %d\n", client->buffer_input, client->buffer_input_len);
-        
-        client = smtp_server.clients[ client_fd ];
+        if (next_state == SMTP_SERVER_ST_CLOSED) {
+            client = NULL;
+        }
+
         if (message_len > 0 && client && client->buffer_input) {
             if (message_len != client->buffer_input_len) {
                 client->buffer_input_len -= message_len;
@@ -274,6 +288,7 @@ int handle_client_read(int client_fd)
                 client->buffer_input = NULL;
                 client->buffer_input_len = 0;
             }
+            
         }
 
         // printf(" afterclient->buffer_input = %s  %d\n", client->buffer_input, client->buffer_input_len);
@@ -284,24 +299,16 @@ int handle_client_read(int client_fd)
 }
 
 
-int handle_client_write( int client_fd )
+int handle_client_write(client_struct* client)
 {
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Writing message to client with fd %d...", client_fd );
-    client_description* client = smtp_server.clients[ client_fd ];
+    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Writing message to client with fd %d...", client->socket_fd );
     if ( !client->sent_output_flag ) {
-        response_to_client( client_fd );
+        response_to_client( client);
     }
     return 0;
 }
 
-void close_client_connection( int client_fd )
-{
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Trying to close client connection..." );
-    close( client_fd );
-    smtp_server.client_sockets_fds = linked_list_delete_node( smtp_server.client_sockets_fds, 
-        client_fd );
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client socket is closed." );
-}
+
 
 void close_server() 
 {
@@ -309,18 +316,18 @@ void close_server()
     finalize_reg();
     logger_destroy( &smtp_server.logger );
 
-    node* client = smtp_server.client_sockets_fds;
-    node* next_client;
+    client_struct* client = smtp_server.clients_list;
+    client_struct* next_client;
     while ( client != NULL ) {
+        close( client->socket_fd );
         next_client = client->next;
-        free_client_info(client->data);
-        free( client );
+        free_client_info(client);
         client = next_client;
     }
 
     free(smtp_server.read_fds);
     free(smtp_server.write_fds);
     free(smtp_server.exceptions_fds);
-    free(smtp_server.clients);
+    free(smtp_server.clients_list);
 
 }

@@ -5,7 +5,7 @@ type   = reentrant;
 
 prefix = smtp_server;
 
-cookie = "int client_socket_fd";
+cookie = "void* client";
 cookie = "const char* matchdata";
 
 state  = ready, hello, mail, rcpt, data, closed;

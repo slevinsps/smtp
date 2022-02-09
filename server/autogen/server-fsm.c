@@ -40,6 +40,7 @@
 
 #include <stdlib.h>
 #include "../state_handlers.h"
+#include "../client_info.h"
 
 /*
  *  Do not make changes to this file, except between the START/END
@@ -279,7 +280,7 @@ te_smtp_server_state
 smtp_server_step(
     te_smtp_server_state smtp_server_state,
     te_smtp_server_event trans_evt,
-    int client_socket_fd,
+    void* client,
     const char* matchdata )
 {
     te_smtp_server_state nxtSt;
@@ -306,70 +307,70 @@ smtp_server_step(
     switch (trans) {
     case SMTP_SERVER_TR_ACCEPTED:
         /* START == ACCEPTED == DO NOT CHANGE THIS COMMENT */
-        nxtSt = HANDLE_ACCEPTED(client_socket_fd, nxtSt);
+        nxtSt = HANDLE_ACCEPTED(client, nxtSt);
         /* END   == ACCEPTED == DO NOT CHANGE THIS COMMENT */
         break;
 
 
     case SMTP_SERVER_TR_CMND_CLOSE:
         /* START == CMND_CLOSE == DO NOT CHANGE THIS COMMENT */
-        nxtSt = HANDLE_CMND_CLOSE(client_socket_fd, nxtSt);
+        nxtSt = HANDLE_CMND_CLOSE(client, nxtSt);
         /* END   == CMND_CLOSE == DO NOT CHANGE THIS COMMENT */
         break;
 
 
     case SMTP_SERVER_TR_CMND_DATA:
         /* START == CMND_DATA == DO NOT CHANGE THIS COMMENT */
-        nxtSt = HANDLE_CMND_DATA(client_socket_fd, nxtSt);
+        nxtSt = HANDLE_CMND_DATA(client, nxtSt);
         /* END   == CMND_DATA == DO NOT CHANGE THIS COMMENT */
         break;
 
 
     case SMTP_SERVER_TR_CMND_EHLO:
         /* START == CMND_EHLO == DO NOT CHANGE THIS COMMENT */
-        nxtSt = HANDLE_CMND_EHLO(client_socket_fd, matchdata, nxtSt);
+        nxtSt = HANDLE_CMND_EHLO(client, matchdata, nxtSt);
         /* END   == CMND_EHLO == DO NOT CHANGE THIS COMMENT */
         break;
 
 
     case SMTP_SERVER_TR_CMND_HELO:
         /* START == CMND_HELO == DO NOT CHANGE THIS COMMENT */
-        nxtSt = HANDLE_CMND_HELO(client_socket_fd, matchdata, nxtSt);
+        nxtSt = HANDLE_CMND_HELO(client, matchdata, nxtSt);
         /* END   == CMND_HELO == DO NOT CHANGE THIS COMMENT */
         break;
 
 
     case SMTP_SERVER_TR_CMND_MAIL:
         /* START == CMND_MAIL == DO NOT CHANGE THIS COMMENT */
-        nxtSt = HANDLE_CMND_MAIL(client_socket_fd, matchdata, nxtSt);
+        nxtSt = HANDLE_CMND_MAIL(client, matchdata, nxtSt);
         /* END   == CMND_MAIL == DO NOT CHANGE THIS COMMENT */
         break;
 
 
     case SMTP_SERVER_TR_CMND_NOOP:
         /* START == CMND_NOOP == DO NOT CHANGE THIS COMMENT */
-        nxtSt = HANDLE_CMND_NOOP(client_socket_fd, nxtSt);
+        nxtSt = HANDLE_CMND_NOOP(client, nxtSt);
         /* END   == CMND_NOOP == DO NOT CHANGE THIS COMMENT */
         break;
 
 
     case SMTP_SERVER_TR_CMND_RCPT:
         /* START == CMND_RCPT == DO NOT CHANGE THIS COMMENT */
-        nxtSt = HANDLE_CMND_RCPT(client_socket_fd, matchdata, nxtSt);
+        nxtSt = HANDLE_CMND_RCPT(client, matchdata, nxtSt);
         /* END   == CMND_RCPT == DO NOT CHANGE THIS COMMENT */
         break;
 
 
     case SMTP_SERVER_TR_CMND_RSET:
         /* START == CMND_RSET == DO NOT CHANGE THIS COMMENT */
-        nxtSt = HANDLE_CMND_RSET(client_socket_fd, nxtSt);
+        nxtSt = HANDLE_CMND_RSET(client, nxtSt);
         /* END   == CMND_RSET == DO NOT CHANGE THIS COMMENT */
         break;
 
 
     case SMTP_SERVER_TR_CMND_VRFY:
         /* START == CMND_VRFY == DO NOT CHANGE THIS COMMENT */
-        nxtSt = HANDLE_CMND_VRFY(client_socket_fd, nxtSt);
+        nxtSt = HANDLE_CMND_VRFY(client, nxtSt);
         /* END   == CMND_VRFY == DO NOT CHANGE THIS COMMENT */
         break;
 
@@ -377,7 +378,7 @@ smtp_server_step(
     case SMTP_SERVER_TR_INVALID:
         /* START == INVALID == DO NOT CHANGE THIS COMMENT */
         printf( "Transition is invalid" );
-        nxtSt = HANDLE_ERROR(client_socket_fd, nxtSt);
+        nxtSt = HANDLE_ERROR(client, nxtSt);
         // exit(smtp_server_invalid_transition(smtp_server_state, trans_evt));
         /* END   == INVALID == DO NOT CHANGE THIS COMMENT */
         break;
@@ -385,14 +386,14 @@ smtp_server_step(
 
     case SMTP_SERVER_TR_MAIL_DATA:
         /* START == MAIL_DATA == DO NOT CHANGE THIS COMMENT */
-        nxtSt = HANDLE_MAIL_DATA(client_socket_fd, matchdata, nxtSt);
+        nxtSt = HANDLE_MAIL_DATA(client, matchdata, nxtSt);
         /* END   == MAIL_DATA == DO NOT CHANGE THIS COMMENT */
         break;
 
 
     case SMTP_SERVER_TR_MAIL_END:
         /* START == MAIL_END == DO NOT CHANGE THIS COMMENT */
-        nxtSt = HANDLE_MAIL_END(client_socket_fd, nxtSt);
+        nxtSt = HANDLE_MAIL_END(client, nxtSt);
         /* END   == MAIL_END == DO NOT CHANGE THIS COMMENT */
         break;
 

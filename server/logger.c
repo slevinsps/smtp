@@ -52,7 +52,6 @@ int logger_init_mq( logger_t* logger )
 {
     printf( "Logger: initializing...\n" );
 
-    /* create Sys MQ for log messages */
     logger->msg_queue_key = LOGGER_QUEUE_KEY;
 
     if ( ( logger->msg_queue_id = msgget( logger->msg_queue_key, 0666 | IPC_CREAT) ) < 0) {
