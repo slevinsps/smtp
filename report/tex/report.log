@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.2)  9 FEB 2022 20:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.2)  9 FEB 2022 21:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -773,7 +773,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.30 \chapter
+l.29 \chapter
              *{Р’РІРµРґРµРЅРёРµ} [1
 
 ] [2
@@ -788,23 +788,23 @@ File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 ) [3
 
 ]
-<../images/er.png, id=183, 434.37282pt x 368.1253pt>
+<../images/er.png, id=188, 434.37282pt x 368.1253pt>
 File: ../images/er.png Graphic file (type png)
 <use ../images/er.png>
-Package pdftex.def Info: ../images/er.png  used on input line 101.
+Package pdftex.def Info: ../images/er.png  used on input line 100.
 (pdftex.def)             Requested size: 483.69684pt x 409.94957pt.
 
-Underfull \hbox (badness 1552) in paragraph at lines 98--105
+Underfull \hbox (badness 1552) in paragraph at lines 97--104
 []\T2A/cmr/m/n/12 Зависимость меж-ду сущ-но-стя-ми пред-мет-ной об-ла-сти мо-же
 т быть опи-са-на ER-
  []
 
 [4] [5 <../images/er.png (PNG copy)>] [6]
 {\cyrillictext \CYRG \cyrl \cyra \cyrv \cyra } 2.
-<../images/serverfsm.png, id=207, 1215.54124pt x 414.54875pt>
+<../images/serverfsm.png, id=212, 1215.54124pt x 414.54875pt>
 File: ../images/serverfsm.png Graphic file (type png)
 <use ../images/serverfsm.png>
-Package pdftex.def Info: ../images/serverfsm.png  used on input line 144.
+Package pdftex.def Info: ../images/serverfsm.png  used on input line 143.
 (pdftex.def)             Requested size: 483.69684pt x 164.95628pt.
 [7
 
@@ -820,15 +820,15 @@ File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 (./regexp/re_cmnd_vrfy.tex) (./regexp/re_cmnd_data.tex)
 (./regexp/re_cmnd_rset.tex) (./regexp/re_cmnd_quit.tex)
 (./regexp/re_mail_end.tex)
-<../images/uml_server_log.png, id=217, 546.54187pt x 423.83344pt>
+<../images/uml_server_log.png, id=222, 546.54187pt x 423.83344pt>
 File: ../images/uml_server_log.png Graphic file (type png)
 <use ../images/uml_server_log.png>
-Package pdftex.def Info: ../images/uml_server_log.png  used on input line 186.
+Package pdftex.def Info: ../images/uml_server_log.png  used on input line 185.
 (pdftex.def)             Requested size: 483.69684pt x 375.10226pt.
-<../images/uml_server_ph.png, id=218, 384.6872pt x 270.25969pt>
+<../images/uml_server_ph.png, id=223, 384.6872pt x 270.25969pt>
 File: ../images/uml_server_ph.png Graphic file (type png)
 <use ../images/uml_server_ph.png>
-Package pdftex.def Info: ../images/uml_server_ph.png  used on input line 193.
+Package pdftex.def Info: ../images/uml_server_ph.png  used on input line 192.
 (pdftex.def)             Requested size: 483.69684pt x 339.84444pt.
  [8] [9 <../images/uml_server_log.png (PNG copy)>]
 [10 <../images/uml_server_ph.png (PNG copy)>] [11]
@@ -836,45 +836,45 @@ Package pdftex.def Info: ../images/uml_server_ph.png  used on input line 193.
 [12
 
 ]
-<../images/makefile_common.png, id=247, 1540.75626pt x 251.94125pt>
+<../images/makefile_common.png, id=252, 1540.75626pt x 251.94125pt>
 File: ../images/makefile_common.png Graphic file (type png)
 <use ../images/makefile_common.png>
-Package pdftex.def Info: ../images/makefile_common.png  used on input line 284.
+Package pdftex.def Info: ../images/makefile_common.png  used on input line 288.
 
 (pdftex.def)             Requested size: 483.69684pt x 79.0928pt.
-<../images/makefile_report.png, id=248, 1592.95125pt x 251.94125pt>
+<../images/makefile_report.png, id=253, 1592.95125pt x 251.94125pt>
 File: ../images/makefile_report.png Graphic file (type png)
 <use ../images/makefile_report.png>
-Package pdftex.def Info: ../images/makefile_report.png  used on input line 290.
+Package pdftex.def Info: ../images/makefile_report.png  used on input line 294.
 
 (pdftex.def)             Requested size: 483.69684pt x 76.50174pt.
  [13 <../images/makefile_common.png> <../images/makefile_report.png>]
-<../images/cflow.png, id=266, 3113.6325pt x 1671.24374pt>
+<../images/cflow.png, id=271, 3113.6325pt x 1671.24374pt>
 File: ../images/cflow.png Graphic file (type png)
 <use ../images/cflow.png>
-Package pdftex.def Info: ../images/cflow.png  used on input line 316.
+Package pdftex.def Info: ../images/cflow.png  used on input line 320.
 (pdftex.def)             Requested size: 483.69684pt x 259.62663pt.
 
 [14 <../images/cflow.png>]
-Underfull \hbox (badness 2772) in paragraph at lines 356--357
+Underfull \hbox (badness 2772) in paragraph at lines 362--363
 []\T2A/cmr/m/n/12 Valgrind по су-ти яв-ля-ет-ся вир-ту-аль-ной ма-ши-ной, ис-по
 ль-зу-ю-щей ме-то-ды JIT-
  []
 
 [15]
-Overfull \hbox (4.00906pt too wide) in paragraph at lines 361--361
+Overfull \hbox (4.00906pt too wide) in paragraph at lines 367--367
 []    \T2A/cmtt/m/n/12 --tool=memcheck --track-origins=yes  --leak-check=full -
 -show-reachable=yes[] 
  []
 
 
-Overfull \hbox (47.22351pt too wide) in paragraph at lines 383--383
+Overfull \hbox (47.22351pt too wide) in paragraph at lines 389--389
 []\T2A/cmtt/m/n/12 ==166487==   total heap usage: 25,774 allocs, 25,774 frees, 
 13,498,089 bytes allocated[] 
  []
 
 [16]
-Underfull \hbox (badness 1668) in paragraph at lines 400--401
+Underfull \hbox (badness 1668) in paragraph at lines 406--407
 []\T2A/cmr/m/n/12 проанализирован \T2A/cmr/bx/n/12 SMTP\T2A/cmr/m/n/12 -протоко
 л и раз-ра-бо-тан ко-неч-ный ав-то-мат об-ра-бот-ки
  []
@@ -882,34 +882,34 @@ Underfull \hbox (badness 1668) in paragraph at lines 400--401
 [17
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 415--416
+Underfull \hbox (badness 10000) in paragraph at lines 421--422
 []\T2A/cmr/m/n/12 Протокол пе-ре-да-чи дан-ных SMTP в ре-дак-ции RFC821
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 417--418
+Underfull \hbox (badness 10000) in paragraph at lines 423--424
 []\T2A/cmr/m/n/12 Протокол пе-ре-да-чи дан-ных SMTP в ре-дак-ции RFC5321
  []
 
 
-Overfull \hbox (40.64516pt too wide) in paragraph at lines 421--422
+Overfull \hbox (40.64516pt too wide) in paragraph at lines 427--428
 []\T2A/cmr/m/n/12 Обзор ме-то-дов IO муль-ти-плек-си-ро-ва-ния https://habr.com
 /ru/company/infopulse/blog/415259/ 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 428--429
+Underfull \hbox (badness 10000) in paragraph at lines 434--435
 []\T2A/cmr/m/n/12 C11 standard (ISO/IEC 9899:201x): http://www.open-
  []
 
 
-Overfull \hbox (46.36108pt too wide) in paragraph at lines 432--433
+Overfull \hbox (46.36108pt too wide) in paragraph at lines 438--439
 []\T2A/cmr/m/n/12 официальный сайт раз-ра-бот-чи-ков make https://www.gnu.org/s
 oftware/make/manual/make.html 
  []
 
 
-Overfull \hbox (43.42426pt too wide) in paragraph at lines 436--437
+Overfull \hbox (43.42426pt too wide) in paragraph at lines 442--443
 []\T2A/cmr/m/n/12 официальный сайт раз-ра-бот-чи-ков cflow https://www.gnu.org/
 software/cflow/manual/cflow.html 
  []
@@ -917,20 +917,20 @@ software/cflow/manual/cflow.html
 [18
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 443.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 443.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 449.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 449.
  (./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 443.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 443.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 449.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 449.
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 09765EBB4C799804449E59FB5067ED19;7226.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 443.
+(rerunfilecheck)             Checksum: C7B34D41B5B32F568EE27B114BEC2601;7753.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 449.
  ) 
 Here is how much of TeX's memory you used:
- 25063 strings out of 482616
- 478853 string characters out of 5956823
- 704880 words of memory out of 5000000
- 39510 multiletter control sequences out of 15000+600000
+ 25066 strings out of 482616
+ 478884 string characters out of 5956823
+ 705880 words of memory out of 5000000
+ 39511 multiletter control sequences out of 15000+600000
  543558 words of font info for 44 fonts, out of 8000000 for 9000
  452 hyphenation exceptions out of 8191
  63i,7n,78p,1725b,673s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -943,10 +943,10 @@ ivan/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1200.600pk> </home/iv
 an/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx2488.600pk> </home/ivan
 /.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1728.600pk> </home/ivan/.
 texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm2074.600pk>
-Output written on report.pdf (19 pages, 1245315 bytes).
+Output written on report.pdf (19 pages, 1246998 bytes).
 PDF statistics:
- 872 PDF objects out of 1000 (max. 8388607)
- 329 compressed objects within 4 object streams
- 100 named destinations out of 1000 (max. 500000)
- 264 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 881 PDF objects out of 1000 (max. 8388607)
+ 335 compressed objects within 4 object streams
+ 102 named destinations out of 1000 (max. 500000)
+ 272 words of extra memory for PDF output out of 10000 (max. 10000000)
 
