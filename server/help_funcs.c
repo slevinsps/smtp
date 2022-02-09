@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <assert.h>
 
 #include "help_funcs.h"
 #include "config.h"
@@ -40,4 +41,31 @@ int make_dir( char* path_to_dir)
         
     }
     return res;
+}
+
+
+
+char* replace_substring(char* string, int len_string, char* substring, char* replacement) {
+    size_t len1 = strlen(substring);
+    size_t len2 = strlen(replacement);
+    assert(len1 >= len2);
+    
+    char* res = calloc(len_string, sizeof(char));
+  
+    char* ptr;
+    char* tmp_res = res;
+    char* tmp_string = string;
+    
+
+    while ((ptr = strstr(string, substring)) != NULL){
+        strncpy(res, string, (size_t)(ptr - string));
+        res += ptr - string;
+        strncpy(res, replacement, len2);
+        res += len2;
+        string  = ptr + len1;
+    }
+
+    strncpy(res, string, (size_t)(len_string - (string - tmp_string)));
+    
+    return tmp_res;
 }

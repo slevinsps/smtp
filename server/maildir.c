@@ -4,15 +4,21 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <string.h>
+
 #include "maildir.h"
 #include "help_funcs.h"
 #include "config.h"
 #include "error_fail.h"
+#include "reg_exprs.h"
+#include "help_funcs.h"
+
 
 void save_mail_to_dir( mail* mail, const char* maildir )
 {
     printf( "Saving mail to maildir...\n" );
     printf( "Recepients number = %d\n", mail->recepients_num);
+    char* maildata = replace_substring(mail->data, mail->data_capacity, EOL_WITH_DOT_MASK, EOL_WITH_DOT);
+
     for ( int i = 0; i < mail->recepients_num; i++ ) {
         char* path_to_user_maildir = make_maildir_for_user( (char*)maildir, mail->recepients[ i ] );
         char* mail_filename = generate_mail_filename();
@@ -27,7 +33,7 @@ void save_mail_to_dir( mail* mail, const char* maildir )
         }
         
         fprintf( mail_fd, "To: <%s>\r\n\r\n", mail->recepients[ i ] );
-        fprintf( mail_fd, "%s", mail->data );
+        fprintf( mail_fd, "%s", maildata );
         fclose( mail_fd );
         rename( path_to_file_in_tmp, path_to_file_in_new );
 
@@ -36,6 +42,7 @@ void save_mail_to_dir( mail* mail, const char* maildir )
         free( mail_filename );
         free( path_to_user_maildir );
     }
+    free(maildata);
     printf( "Saving mail to maildir finished.\n" );
 }
 

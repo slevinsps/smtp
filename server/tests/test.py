@@ -19,9 +19,9 @@ def check_command(s, cmd, body, code):
         return -1
     return 0
 
-def test_one_connect(path_to_data = None, num_rcpt = 1, num_mails = 1, sender = True, host = 'localhost', port = 1026):
+def test_one_connect(path_to_data = None, num_rcpt = 1, num_mails = 1, sender = True, host = 'localhost', port = 1026, msg_text = 'hello world!'):
     num_rcpt = max(num_rcpt, 1)
-    send_data = b'hello world!'
+    send_data = str.encode(msg_text)
     
     if path_to_data:
         with open(path_to_data, 'r') as content_file:
@@ -174,7 +174,6 @@ def test_on_quit_commands(host = 'localhost', port = 1026):
     if check_command(s, '\r\n.', '', OK_ANS) < 0: return -1
     if check_command(s, 'quit', '', CLOSING_CHANNEL_ANS) < 0: return -1 
     s.close()
-    
     return 0
 
 def tests():
@@ -208,7 +207,10 @@ def tests():
     # one rcpt small text no sender
     res = test_one_connect(num_rcpt = 1, sender = False)
     print('FAIL in test 8') if res < 0 else print('PASS test 8');
-        
+    # one rcpt small text with \r\n.\r\n
+    res = test_one_connect(num_rcpt = 1, msg_text = '\r\n..\r\nhello \r\n..\r\n world\r\n..\r\n oo\r\n.....\r\nooo\r\n..\r\n')
+    print('FAIL in test 9') if res < 0 else print('PASS test 9');
     
+
 if __name__ == '__main__':
     tests()

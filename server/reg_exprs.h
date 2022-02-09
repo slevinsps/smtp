@@ -26,5 +26,8 @@
 #define EOL "\r\n"
 #define EOM "\r\n.\r\n"
 
+#define EOL_WITH_DOT_MASK "\r\n.."
+#define EOL_WITH_DOT "\r\n."
+
 
 #endif //SMTP_MTA_REXPRS_H

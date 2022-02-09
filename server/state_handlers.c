@@ -42,7 +42,7 @@ int HANDLE_CMND_NOOP( int client_fd, te_smtp_server_state nextState ) {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command NOOP..." );
     client_description* client = smtp_server.clients[ client_fd ];
     client->time = time(NULL);
-    
+
     add_data_to_buffer( client_fd, RE_RESP_OK );
     response_to_client( client_fd );
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling command NOOP finished." );
@@ -222,8 +222,7 @@ int HANDLE_CMND_DATA( int client_fd, te_smtp_server_state nextState )
     client->time = time(NULL);
 
     // initializing a little buffer for mail data
-    client->mail->data = malloc( sizeof( char ) );
-    client->mail->data[ 0 ] = '\0';
+    client->mail->data = NULL;
     client->mail->data_capacity = 0;
 
     add_data_to_buffer( client_fd, RE_RESP_START_MAIL );
@@ -236,9 +235,9 @@ int HANDLE_CMND_DATA( int client_fd, te_smtp_server_state nextState )
 int HANDLE_MAIL_DATA( int client_fd, const char* matchdata,  te_smtp_server_state nextState )
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Handling mail data..." );
-    client_description* client = smtp_server.clients[ client_fd ];
+    // client_description* client = smtp_server.clients[ client_fd ];
 
-    add_data_to_mail( client->mail, client->buffer_input, strlen( client->buffer_input ) );
+    // add_data_to_mail( client->mail, client->buffer_input, strlen( client->buffer_input ) );
 
 
     return nextState;

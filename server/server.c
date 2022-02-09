@@ -51,8 +51,6 @@ int initialize_server( int port, const char* maildir, logger_t *logger_listener 
 
 void server_update_fds()
 {
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Updating fd sets for pselect..." );
-
     /* Reading server's fd set */
 
     /* Adding server socket */
@@ -80,8 +78,6 @@ void server_update_fds()
     /* Expections server's fd sets */
     FD_ZERO( smtp_server.exceptions_fds );
     FD_SET( smtp_server.server_socket_fd, smtp_server.exceptions_fds );
-
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Fd sets successfully updated." );
 }
 
 int run_server() 
@@ -94,8 +90,6 @@ int run_server()
         int res_pselect = pselect( smtp_server.max_fd + 1, smtp_server.read_fds,
                 smtp_server.write_fds, smtp_server.exceptions_fds, NULL, NULL );
         
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Pselect : %d", res_pselect );
-
         switch ( res_pselect ) {
         case -1: 
             handle_error( "ERROR pselect returns -1." ); 

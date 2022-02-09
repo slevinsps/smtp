@@ -26,21 +26,9 @@ void free_mail( mail* mail ) {
 }
 
 void add_data_to_mail( mail* mail, char* new_data, int new_data_len ) {
-    // realloc if needed
-    if ( strlen( mail->data ) + strlen( new_data ) + 1 >= mail->data_capacity ) { // +1 char for newline
-        mail->data = realloc_mail_data_for_length( mail, new_data_len );
-    }
-
-    // append data from new buffer to mail buffer
-    char* new_mail_data = concat_strings( mail->data, new_data, strlen(mail->data), strlen(new_data), "" );
-    free( mail->data );
+    char* new_mail_data = concat_strings("", new_data, 0, new_data_len, "" );
     mail->data = new_mail_data;
+    mail->data_capacity = new_data_len;
 }
 
-char* realloc_mail_data_for_length( mail* mail, int len ) {
-    int malloc_size = strlen( mail->data ) + BUFFER_SIZE;
-    mail->data = ( char * )realloc( mail->data, malloc_size );
-    mail->data_capacity = malloc_size;
-    return  mail->data;
-}
 
