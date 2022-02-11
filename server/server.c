@@ -50,42 +50,31 @@ int initialize_server( int port, const char* maildir, logger_t *logger_listener 
 
 void server_update_fds()
 {
-    /* Reading server's fd set */
-
-    /* Adding server socket */
     FD_ZERO( smtp_server.read_fds );
+    FD_ZERO( smtp_server.write_fds );
     FD_SET( smtp_server.server_fd, smtp_server.read_fds );
 
     smtp_server.max_fd = smtp_server.server_fd;
 
-    /* Adding clients sockets if exist */
     client_struct* current_client = smtp_server.clients_list;
     while ( current_client != NULL ) {
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Adding client to fd set." );
         FD_SET( current_client->socket_fd, smtp_server.read_fds );
-        // FD_SET( current_client->data, smtp_server.write_fds );
+        FD_SET( current_client->socket_fd, smtp_server.write_fds );
         if ( current_client->socket_fd > smtp_server.max_fd ) {
             smtp_server.max_fd = current_client->socket_fd;
         }
         current_client = current_client->next;
     }
 
-    /* Writing server's fd set */
-    FD_ZERO( smtp_server.write_fds );
-
-
-    /* Expections server's fd sets */
     FD_ZERO( smtp_server.exceptions_fds );
     FD_SET( smtp_server.server_fd, smtp_server.exceptions_fds );
 }
 
 int run_server() 
 {
-    /* Main server loop */
     while (1) {
         server_update_fds();
 
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Waiting for pselect..." );
         int res_pselect = pselect( smtp_server.max_fd + 1, smtp_server.read_fds,
                 smtp_server.write_fds, smtp_server.exceptions_fds, NULL, NULL );
         
@@ -117,7 +106,6 @@ int run_server()
                         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "handle client read");
                         handle_client_read( current_client );
                     } else if ( FD_ISSET( current_client->socket_fd, smtp_server.write_fds ) ) {
-                        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "handle client write");
                         handle_client_write( current_client );
                     } else if ( FD_ISSET( current_client->socket_fd, smtp_server.exceptions_fds ) ) {
                         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Exception in client with fd %i.", current_client->socket_fd );
@@ -138,9 +126,10 @@ int run_server()
 void handle_new_connect() 
 {           
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Trying to accept new connection..." );
-    int client_socket_fd = accept( smtp_server.server_fd, NULL, 0 );
+    int client_socket_fd = accept( smtp_server.server_fd, NULL, 0 ); // sockaddr - NULL
     if ( client_socket_fd < 0 ) {
-        handle_error( "ERROR can not accept client!" );
+        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO,"Can not accept client!");
+        return;
     }
 
     if ( nonblocking_socket( client_socket_fd ) ) {
@@ -169,30 +158,9 @@ void handle_new_connect()
 
 
 int handle_command(client_struct* client, te_smtp_server_state* next_state) {
-    int msg_len = 0;
-    char* end = strstr(client->buffer_input, EOM);
-
-    if (end) {
-        int end_size = sizeof(EOM) - 1;
-        end += end_size; 
-        msg_len = end - client->buffer_input;
-
-        re_commands cmnd = (re_commands) SMTP_SERVER_EV_INVALID;
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Reg find command %d with match data = %s", cmnd, "");
-
-        *next_state = smtp_server_step(client->smtp_state,
-                                    (te_smtp_server_event) cmnd, client, "");
-        
-        if (*next_state != SMTP_SERVER_ST_CLOSED && *next_state != SMTP_SERVER_ST_INVALID) {
-            client->smtp_state = *next_state;
-            log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "New current state for client %d is %d.", client->socket_fd, client->smtp_state );
-        }
-        
-        return msg_len;
-    }
 
     int message_len = 0;
-    end = strstr(client->buffer_input, EOL);
+    char* end = strstr(client->buffer_input, EOL);
 
     if (end) {
         int end_size = sizeof(EOL) - 1;
@@ -209,7 +177,12 @@ int handle_command(client_struct* client, te_smtp_server_state* next_state) {
         if (*next_state != SMTP_SERVER_ST_CLOSED && *next_state != SMTP_SERVER_ST_INVALID) {
             client->smtp_state = *next_state;
             log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "New current state for client %d is %d.", client->socket_fd, client->smtp_state );
+        } else if (*next_state == SMTP_SERVER_ST_INVALID) {
+            free(client->buffer_input);
+            client->buffer_input = NULL;
+            client->buffer_input_len = 0;
         }
+        
 
         free_match_data(matchdata);
     }
@@ -301,7 +274,6 @@ int handle_client_read(client_struct* client)
 
 int handle_client_write(client_struct* client)
 {
-    log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Writing message to client with fd %d...", client->socket_fd );
     if ( !client->sent_output_flag ) {
         response_to_client( client);
     }
@@ -325,9 +297,13 @@ void close_server()
         client = next_client;
     }
 
-    free(smtp_server.read_fds);
-    free(smtp_server.write_fds);
-    free(smtp_server.exceptions_fds);
-    free(smtp_server.clients_list);
+    if (smtp_server.read_fds)
+        free(smtp_server.read_fds);
+    if (smtp_server.write_fds)
+        free(smtp_server.write_fds);
+    if (smtp_server.exceptions_fds)
+        free(smtp_server.exceptions_fds);
+    if (smtp_server.clients_list)
+        free(smtp_server.clients_list);
 
 }

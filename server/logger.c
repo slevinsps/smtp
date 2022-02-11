@@ -71,7 +71,7 @@ void logger_destroy( logger_t* logger )
         printf( "Logger file close.\n" );
     } else {
         msgctl( logger->msg_queue_id, IPC_RMID, NULL);
-        printf("LOG_MSG_EXIT send\n");
+        printf("LOG_MSG_EXIT\n");
     }
 
     printf( "Logger finalized.\n" );
@@ -80,21 +80,17 @@ void logger_destroy( logger_t* logger )
 void logger_run_loop( logger_t* logger )
 {
     printf( "Running logger loop..\n" );
-    /* Sys MQ data for log msg */
     log_msg_t log_msg;
     ssize_t log_msg_sz;
     log_msg_sz = sizeof( log_msg.msg_text );
 
-    /* Logger in loop until exit message will be received */
     while(1) {
-        // msgrcv to receive message
         int res = msgrcv( logger->msg_queue_id, &log_msg, log_msg_sz, 1, 0);
         if (res < 0 && errno == EIDRM) {
             printf( "Logger: log msg is exit cmnd.\n" );
             break;
         }
 
-        // display and write message to log file
         printf( "%s \n", log_msg.msg_text );
         fprintf( logger->file, "%s\r\n", log_msg.msg_text );
         fflush(logger->file);
@@ -162,11 +158,9 @@ int logger_open_file( logger_t* logger )
 
 int log_info( logger_t* logger, log_msg_type_t msg_type, const char *format, ...)
 {
-    /* Sys MQ data for log msg */
     log_msg_t log_msg;
     log_msg.msg_type = 1;
     ssize_t log_msg_sz  = sizeof( log_msg.msg_text );
-    /* create full log message string */
     char* timestring = logger_get_log_time();
     char* typestring = logger_get_log_type( msg_type );
 
@@ -174,8 +168,8 @@ int log_info( logger_t* logger, log_msg_type_t msg_type, const char *format, ...
     va_list args;
 
     va_start(args, format);
-    if(vasprintf(&string, format, args) < 0) {
-        string = NULL;    //this is for logging, so failed allocation is not fatal
+    if(vasprintf(&string, format, args) < 0) { //NOLINT
+        string = NULL; 
     }
     va_end(args);
 
@@ -193,7 +187,7 @@ int log_info( logger_t* logger, log_msg_type_t msg_type, const char *format, ...
     free(typestring);
     free(timestring);
 
-    /* Send log message to logger_listener */
+    // IPC_NOWAIT - не ждем
     if ( ( msgsnd( logger->msg_queue_id, &log_msg, log_msg_sz, IPC_NOWAIT ) ) < 0 ) {
         printf("ERROR log_info(): msgsnd()\n");
         return 1;

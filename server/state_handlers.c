@@ -23,8 +23,8 @@ extern struct server smtp_server;
 int response_to_client(client_struct* client)
 {
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Sending message to client with fd %d...", client->socket_fd );
-
-    ssize_t actual_sent = send( client->socket_fd, client->buffer_output, strlen( client->buffer_output ), MSG_NOSIGNAL );
+    // MSG_NOSIGNAL - Требует не посылать сигнал SIGPIPE, если при работе с ориентированным на поток сокетом другая сторона обрывает соединение. Код ошибки EPIPE возвращается в любом случае.
+    ssize_t actual_sent = send( client->socket_fd, client->buffer_output, strlen( client->buffer_output ), MSG_NOSIGNAL ); 
     if ( actual_sent < 0 && ( errno == EPIPE || errno == EAGAIN ) ) {
         client->sent_output_flag = 0;
         log_info( &smtp_server.logger, LOG_MSG_TYPE_ERROR, "Error while sending message EAGAIN or EPIPE, continue.." );
@@ -109,7 +109,6 @@ int HANDLE_CMND_EHLO( client_struct* client, const char* matchdata, te_smtp_serv
     if ( strcmp( host, host_reverse ) == 0 ) {
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is verified.\r", client );
     } else {
-        // it doesn't matter
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Client's (%d) address is not verified!\r", client );
     }
 
@@ -117,7 +116,6 @@ int HANDLE_CMND_EHLO( client_struct* client, const char* matchdata, te_smtp_serv
         free(host_reverse);
     }
 
-    // TODO: to add supported smtp commands to response?
     add_data_to_buffer( client, RE_RESP_OK );
     response_to_client( client );
 
@@ -139,7 +137,6 @@ int HANDLE_CMND_MAIL( client_struct* client, const char* matchdata, te_smtp_serv
         log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Without email address." );
     }
 
-    // adding sender address to client's mail
     client->mail = malloc(sizeof( mail ) );
     memset( client->mail, 0, sizeof( mail ) );
     client->mail->recepients = NULL;
@@ -170,7 +167,6 @@ int HANDLE_CMND_RCPT( client_struct* client, const char* matchdata, te_smtp_serv
         response_to_client( client );
     } else {
         if ( client->mail->recepients == NULL ) {
-            // allocation if adding first recepient
             client->mail->recepients = malloc(
                     sizeof(char *) * MAX_RCPT_CLIENTS); // TODO: change allocation (add realloc)
         }

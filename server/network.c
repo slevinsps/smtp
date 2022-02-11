@@ -16,14 +16,15 @@ int create_socket( int port )
 {
     int socket_fd;
 
+    //SOCK_STREAM - этот тип обеспечивает последовательный, надежный, ориентированный на установление двусторонней связи поток байтов.
     if ( ( socket_fd = socket( AF_INET, SOCK_STREAM, 0 ) ) == 0 ) { 
         handle_error( "Can not create socket!" );
     } 
 
     struct sockaddr_in address; 
     memset( &address, '0', sizeof( address ) );
-    address.sin_family = AF_INET; 
-    address.sin_addr.s_addr = INADDR_ANY; 
+    address.sin_family = AF_INET; // ipv4
+    address.sin_addr.s_addr = INADDR_ANY; // связать сокет со всеми локальными интерфейсами
     address.sin_port = htons( port ); 
     
     int sock_opt = 1;
@@ -31,6 +32,17 @@ int create_socket( int port )
 		handle_error( "Can not set socket options" ); 
     }
     
+    /*
+        Its possible to set a descriptor so that it is placed in "non-blocking" mode. 
+        When placed in non-blocking mode, you never wait for an operation to complete. 
+        This is an invaluable tool if you need to switch between many different connected sockets, 
+        and want to ensure that none of them cause the program to "lock up."
+
+        If you call "recv()" in non-blocking mode, it will return any data that the 
+        system has in it's read buffer for that socket. But, it won't wait for that data. 
+        If the read buffer is empty, the system will return from recv() 
+        immediately saying ``"Operation Would Block!"''.      
+    */
     fcntl(socket_fd, F_SETFL, O_NONBLOCK);
 
     if ( bind( socket_fd, ( struct sockaddr * ) &address,  

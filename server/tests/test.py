@@ -72,6 +72,8 @@ def test_on_bad_commands(host = 'localhost', port = 1026):
     
     if check_command(s, 'aaaaaaa', '', BAD_SEQ_COM_ANS) < 0: return -1 
     if check_command(s, 'helo ', 'localhost', OK_ANS) < 0: return -1 
+    if check_command(s, '\r\n.', '', BAD_SEQ_COM_ANS) < 0: return -1 
+
     if check_command(s, 'mailllll from: ', '<ivan@mail.ru>', BAD_SEQ_COM_ANS) < 0: return -1 
     if check_command(s, 'mail from: ', '<ivan@mail.ru>', OK_ANS) < 0: return -1 
     if check_command(s, 'rcpt to  : ', '<test25@mail.ru>', BAD_SEQ_COM_ANS) < 0: return -1 
@@ -80,7 +82,6 @@ def test_on_bad_commands(host = 'localhost', port = 1026):
     if check_command(s, 'data', '', DATA_ANS) < 0: return -1 
     s.sendall(send_data)
     if check_command(s, '\r\n.', '', OK_ANS) < 0: return -1 
-    if check_command(s, '\r\n.', '', BAD_SEQ_COM_ANS) < 0: return -1 
     if check_command(s, 'quit', '', CLOSING_CHANNEL_ANS) < 0: return -1 
     
     s.close()

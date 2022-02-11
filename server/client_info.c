@@ -74,13 +74,11 @@ void free_client_info( client_struct* client ) {
 int add_data_to_buffer( client_struct* client, char* data )
 {
     if ( client->buffer_output == NULL ) {
-        client->buffer_output = malloc( BUFFER_SIZE );
-        memset(client->buffer_output, 0, BUFFER_SIZE);
+        client->buffer_output = calloc( BUFFER_SIZE, sizeof(char));
     }
-    if ( strlen( client->buffer_output ) + strlen( data ) >= BUFFER_SIZE ) {
-        handle_error( "Output buffer for client is full" );
-    }
-    sprintf( client->buffer_output + strlen( client->buffer_output ), "%s", data );
+
+    int num_to_write = BUFFER_SIZE - 1 - strlen( client->buffer_output);
+    snprintf(client->buffer_output + strlen( client->buffer_output ), num_to_write, "%s", data);
     client->sent_output_flag = 0;
     return 0;
 }
