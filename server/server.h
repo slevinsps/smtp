@@ -22,7 +22,7 @@ typedef struct {
 } config_t;
 
 struct server {
-	int server_socket_fd;
+	int server_fd;
 
 	client_struct* clients_list;
 

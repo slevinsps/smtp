@@ -18,16 +18,20 @@ make_report:
 	make -C $(REPORT_DIR)
 
 .PHONY: default_run
-make default_run:
+make default_run: server
 	./server/build/server -p 1026 -d mail
 
 .PHONY: valgrind_run
-make valgrind_run:
+make valgrind_run: server
 	valgrind --tool=memcheck --track-origins=yes  --leak-check=full --show-reachable=yes  ./server/build/server -p 1026 -d mail
 
-.PHONY: test
-make test:
+.PHONY: integration_test
+make integration_test:
 	python ./server/tests/test.py
+
+.PHONY: unit_test
+make unit_test:
+	make unit_test -C $(SERVER_DIR) --directory=$(BUILD_DIR) --makefile=../Makefile
 
 .PHONY: building_dir
 building_dir:

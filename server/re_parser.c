@@ -65,17 +65,17 @@ int compile_reg( re_commands re_pattern_name )
     return 0;
 }
 
-re_commands match_reg( const char* text, const char** matchdata, int len_texts )
+re_commands match_reg( const char* text, const char** matchdata, int len_text )
 {
     int sub_str_vec[SUB_STR_VEC_LEN];
     int i;
     for (i = 0; i < SMTP_RE_CMNDS_COUNTER; i++) {
         int pcre_ret = pcre_exec(smtp_re_compiled[i], 
-            smtp_re_compiled_extra[i], text, len_texts, 0, 0, sub_str_vec, SUB_STR_VEC_LEN);
+            smtp_re_compiled_extra[i], text, len_text, 0, 0, sub_str_vec, SUB_STR_VEC_LEN);
 
         if (pcre_ret == PCRE_ERROR_NOMEMORY || pcre_ret == PCRE_ERROR_UNKNOWN_NODE) {
             printf( "PCRE compilation failed at compiled\n");
-            return SMTP_SERVER_EV_INVALID;
+            return (re_commands)SMTP_SERVER_EV_INVALID;
         } else if (pcre_ret > 0) {
             if (pcre_ret > 1) {
                 pcre_get_substring(text, sub_str_vec, pcre_ret, 1, matchdata);

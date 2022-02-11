@@ -28,7 +28,7 @@ extern struct server smtp_server;
 int initialize_server( int port, const char* maildir, logger_t *logger_listener )
 {
     printf( "Initializing server..." );
-    smtp_server.server_socket_fd = create_socket( port );
+    smtp_server.server_fd = create_socket( port );
     smtp_server.clients_list = NULL;
     smtp_server.read_fds  = ( fd_set* ) malloc( sizeof ( fd_set ) );
     smtp_server.write_fds = ( fd_set* ) malloc( sizeof ( fd_set ) );
@@ -54,9 +54,9 @@ void server_update_fds()
 
     /* Adding server socket */
     FD_ZERO( smtp_server.read_fds );
-    FD_SET( smtp_server.server_socket_fd, smtp_server.read_fds );
+    FD_SET( smtp_server.server_fd, smtp_server.read_fds );
 
-    smtp_server.max_fd = smtp_server.server_socket_fd;
+    smtp_server.max_fd = smtp_server.server_fd;
 
     /* Adding clients sockets if exist */
     client_struct* current_client = smtp_server.clients_list;
@@ -76,7 +76,7 @@ void server_update_fds()
 
     /* Expections server's fd sets */
     FD_ZERO( smtp_server.exceptions_fds );
-    FD_SET( smtp_server.server_socket_fd, smtp_server.exceptions_fds );
+    FD_SET( smtp_server.server_fd, smtp_server.exceptions_fds );
 }
 
 int run_server() 
@@ -96,11 +96,11 @@ int run_server()
         default:
 
             /* Checking server socket. */
-            if ( FD_ISSET( smtp_server.server_socket_fd, smtp_server.read_fds ) ) {
+            if ( FD_ISSET( smtp_server.server_fd, smtp_server.read_fds ) ) {
                 handle_new_connect();
             }
 
-            if ( FD_ISSET( smtp_server.server_socket_fd, smtp_server.exceptions_fds ) ) {
+            if ( FD_ISSET( smtp_server.server_fd, smtp_server.exceptions_fds ) ) {
                 handle_error( "ERROR exception listen socket fd." );
             }
 
@@ -138,7 +138,7 @@ int run_server()
 void handle_new_connect() 
 {           
     log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Trying to accept new connection..." );
-    int client_socket_fd = accept( smtp_server.server_socket_fd, NULL, 0 );
+    int client_socket_fd = accept( smtp_server.server_fd, NULL, 0 );
     if ( client_socket_fd < 0 ) {
         handle_error( "ERROR can not accept client!" );
     }
@@ -312,7 +312,7 @@ int handle_client_write(client_struct* client)
 
 void close_server() 
 {
-    close( smtp_server.server_socket_fd );
+    close( smtp_server.server_fd );
     finalize_reg();
     logger_destroy( &smtp_server.logger );
 

@@ -2,7 +2,7 @@ BUILD_DIR = build
 
 compile_flags := -g -g3 -O0 -D_GNU_SOURCE -DDEBUG
 
-full_program_name := server
+full_program_name := server tests
 source_dirs := . autogen
 source_dirs := $(addprefix ../,$(source_dirs))
 
@@ -31,6 +31,10 @@ VPATH := $(source_dirs)
 	gcc $(version) -c -MD $(compile_flags) $(cflags) $(addprefix -I,$(source_dirs)) $<
 
 include $(wildcard *.d) 
+
+unit_test:
+	gcc ../tests/re_parser_test.c  re_parser.o -Wall -o test -lcheck -pthread -lcheck_pic -lrt -lm -lsubunit $(ldflags) && ./test
+
 
 .PHONY: clean
 clean:

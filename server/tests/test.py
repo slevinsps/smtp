@@ -210,7 +210,7 @@ def tests():
     # one rcpt small text with \r\n.\r\n
     res = test_one_connect(num_rcpt = 1, msg_text = '\r\n..\r\nhello \r\n..\r\n world\r\n..\r\n oo\r\n.....\r\nooo\r\n..\r\n')
     print('FAIL in test 9') if res < 0 else print('PASS test 9');
-    
+
 
 if __name__ == '__main__':
     tests()

@@ -31,8 +31,10 @@ void save_mail_to_dir( mail* mail, const char* maildir )
         } else {
             fprintf( mail_fd, "From: <>\r\n");
         }
+        for ( int j = 0; j < mail->recepients_num; j++ ) {
+            fprintf( mail_fd, "To: <%s>\r\n", mail->recepients[ j ] );
+        }
         
-        fprintf( mail_fd, "To: <%s>\r\n\r\n", mail->recepients[ i ] );
         fprintf( mail_fd, "%s", maildata );
         fclose( mail_fd );
         rename( path_to_file_in_tmp, path_to_file_in_new );

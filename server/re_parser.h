@@ -25,7 +25,7 @@ typedef enum {
 int initialize_reg();
 int finalize_reg();
 int compile_reg( re_commands re_pattern_name );
-re_commands match_reg( const char* text, const char** matchdata, int len_texts );
+re_commands match_reg( const char* text, const char** matchdata, int len_text );
 void free_match_data(const char* match_data);
 
 
