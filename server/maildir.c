@@ -27,12 +27,12 @@ void save_mail_to_dir( mail* mail, const char* maildir )
 
         FILE* mail_fd = fopen( path_to_file_in_tmp, "a" );
         if (mail->sender) {
-            fprintf( mail_fd, "From: <%s>\r\n", mail->sender );
+            fprintf( mail_fd, "From: <%s>\n", mail->sender );
         } else {
-            fprintf( mail_fd, "From: <>\r\n");
+            fprintf( mail_fd, "From: <>\n");
         }
         for ( int j = 0; j < mail->recepients_num; j++ ) {
-            fprintf( mail_fd, "To: <%s>\r\n", mail->recepients[ j ] );
+            fprintf( mail_fd, "To: <%s>\n", mail->recepients[ j ] );
         }
         
         fprintf( mail_fd, "%s", maildata );

@@ -229,8 +229,8 @@ int handle_client_read(client_struct* client)
     } else if ( received == 0 ) {
         smtp_server_step( client->smtp_state, SMTP_SERVER_EV_CONN_LOST, client, NULL);
     } else {
-        log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Message \"%s\" received from client.",
-               buffer );
+        // log_info( &smtp_server.logger, LOG_MSG_TYPE_INFO, "Message \"%s\" received from client.",
+        //        buffer );
 
         char* new_buffer = concat_strings(client->buffer_input, buffer, client->buffer_input_len, received, "");
         if (client->buffer_input)

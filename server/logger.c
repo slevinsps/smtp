@@ -91,7 +91,7 @@ void logger_run_loop( logger_t* logger )
             break;
         }
 
-        printf( "%s \n", log_msg.msg_text );
+        // printf( "%s \n", log_msg.msg_text );
         fprintf( logger->file, "%s\r\n", log_msg.msg_text );
         fflush(logger->file);
 
